@@ -1,0 +1,8 @@
+{
+  "name": "Remix Remix Remix Bizú Tático - Estoque \u0026 Pedidos",
+  "description": "Sistema tático de controle de estoque de artigos militares, baixa de pedidos com perfil do militar e relatórios de arsenal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

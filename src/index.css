@@ -1,0 +1,303 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  h1, h2, h3, h4, .font-tactical {
+    font-family: 'Chakra Petch', sans-serif;
+    letter-spacing: 0.03em;
+  }
+}
+
+/* Scrollbars Táticos */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+/* Efeito Metálico & Texturas */
+.bg-tactical-card {
+  background: linear-gradient(135deg, rgba(24, 24, 27, 0.9) 0%, rgba(15, 15, 18, 0.95) 100%);
+}
+
+.border-tactical {
+  border-color: rgba(63, 63, 70, 0.6);
+}
+
+.text-metallic {
+  background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-military-badge {
+  background: linear-gradient(180deg, #27272a 0%, #18181b 100%);
+  border: 1px solid #3f3f46;
+}
+
+.tactical-crosshair-bg {
+  background-image: radial-gradient(rgba(234, 179, 8, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ======================================================
+   THEME 1: STEALTH BLACKOUT (PRETO NOTURNO STEALTH)
+   ====================================================== */
+html[data-theme="stealth-black"] {
+  background-color: #000000;
+  color: #f4f4f5;
+}
+
+html[data-theme="stealth-black"] body,
+html[data-theme="stealth-black"] main {
+  background-color: #000000 !important;
+}
+
+html[data-theme="stealth-black"] .bg-zinc-950 {
+  background-color: #000000 !important;
+}
+
+html[data-theme="stealth-black"] .bg-zinc-900,
+html[data-theme="stealth-black"] .bg-zinc-900\/80,
+html[data-theme="stealth-black"] .bg-zinc-900\/90 {
+  background-color: #08080a !important;
+}
+
+html[data-theme="stealth-black"] .bg-tactical-card {
+  background: #040406 !important;
+  border-color: #1f1f23 !important;
+}
+
+html[data-theme="stealth-black"] .border-zinc-800,
+html[data-theme="stealth-black"] .border-zinc-800\/80,
+html[data-theme="stealth-black"] .border-zinc-800\/60 {
+  border-color: #18181b !important;
+}
+
+html[data-theme="stealth-black"] .tactical-crosshair-bg {
+  background-image: radial-gradient(rgba(16, 185, 129, 0.12) 1px, transparent 1px) !important;
+}
+
+/* ======================================================
+   THEME 2: OLIVE MILITARIA (MILITAR VERDE OLIVA)
+   ====================================================== */
+html[data-theme="olive-militaria"] {
+  background-color: #09120b;
+  color: #f0fdf4;
+}
+
+html[data-theme="olive-militaria"] body,
+html[data-theme="olive-militaria"] main {
+  background-color: #09120b !important;
+}
+
+html[data-theme="olive-militaria"] .bg-zinc-950 {
+  background-color: #08100a !important;
+}
+
+html[data-theme="olive-militaria"] .bg-zinc-900,
+html[data-theme="olive-militaria"] .bg-zinc-900\/80,
+html[data-theme="olive-militaria"] .bg-zinc-900\/90 {
+  background-color: #0f1f13 !important;
+}
+
+html[data-theme="olive-militaria"] .bg-tactical-card {
+  background: linear-gradient(135deg, rgba(18, 36, 22, 0.95) 0%, rgba(12, 24, 15, 0.98) 100%) !important;
+  border-color: #233e28 !important;
+}
+
+html[data-theme="olive-militaria"] .border-zinc-800,
+html[data-theme="olive-militaria"] .border-zinc-800\/80,
+html[data-theme="olive-militaria"] .border-zinc-800\/60 {
+  border-color: #1d3522 !important;
+}
+
+html[data-theme="olive-militaria"] .tactical-crosshair-bg {
+  background-image: radial-gradient(rgba(16, 185, 129, 0.12) 1px, transparent 1px) !important;
+}
+
+/* ======================================================
+   THEME 3: CINZA TÁTICO SUAVE (TACTICAL LIGHT NEUTRAL)
+   ====================================================== */
+html[data-theme="tactical-light"] {
+  background-color: #cbd5e1;
+  color: #0f172a;
+}
+
+html[data-theme="tactical-light"] body,
+html[data-theme="tactical-light"] main {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html[data-theme="tactical-light"] .bg-zinc-950 {
+  background-color: #d1d5db !important;
+}
+
+html[data-theme="tactical-light"] .bg-zinc-900,
+html[data-theme="tactical-light"] .bg-zinc-900\/80,
+html[data-theme="tactical-light"] .bg-zinc-900\/90 {
+  background-color: #f1f5f9 !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08) !important;
+}
+
+html[data-theme="tactical-light"] .bg-tactical-card {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.08) !important;
+}
+
+html[data-theme="tactical-light"] .border-zinc-800,
+html[data-theme="tactical-light"] .border-zinc-800\/80,
+html[data-theme="tactical-light"] .border-zinc-800\/60 {
+  border-color: #cbd5e1 !important;
+}
+
+/* Typography & Text overrides for light mode */
+html[data-theme="tactical-light"] main .text-white,
+html[data-theme="tactical-light"] main .text-zinc-100,
+html[data-theme="tactical-light"] main .text-zinc-200 {
+  color: #0f172a !important;
+}
+
+html[data-theme="tactical-light"] main .text-zinc-300,
+html[data-theme="tactical-light"] main .text-zinc-400 {
+  color: #334155 !important;
+}
+
+html[data-theme="tactical-light"] main .text-zinc-500 {
+  color: #475569 !important;
+}
+
+/* Inputs & Form Elements in Light Mode */
+html[data-theme="tactical-light"] main input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="tactical-light"] main select,
+html[data-theme="tactical-light"] main textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #94a3b8 !important;
+}
+
+html[data-theme="tactical-light"] main input::placeholder,
+html[data-theme="tactical-light"] main textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Sidebar in Light Mode - Slate Dark Contrast */
+html[data-theme="tactical-light"] aside {
+  background-color: #1e293b !important;
+  border-right-color: #334155 !important;
+}
+
+html[data-theme="tactical-light"] aside .text-zinc-200,
+html[data-theme="tactical-light"] aside .text-zinc-300,
+html[data-theme="tactical-light"] aside .text-white {
+  color: #f8fafc !important;
+}
+
+html[data-theme="tactical-light"] aside .text-zinc-400 {
+  color: #94a3b8 !important;
+}
+
+/* Header in Light Mode */
+html[data-theme="tactical-light"] header {
+  background-color: #f1f5f9 !important;
+  border-bottom-color: #cbd5e1 !important;
+}
+
+html[data-theme="tactical-light"] header .text-white,
+html[data-theme="tactical-light"] header .text-zinc-100 {
+  color: #0f172a !important;
+}
+
+html[data-theme="tactical-light"] header .text-zinc-400 {
+  color: #334155 !important;
+}
+
+/* Modals & Receipts in Light Mode */
+html[data-theme="tactical-light"] .bg-zinc-950\/80,
+html[data-theme="tactical-light"] .bg-zinc-900\/90 {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+html[data-theme="tactical-light"] .text-metallic {
+  background: linear-gradient(180deg, #0f172a 0%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html[data-theme="tactical-light"] .tactical-crosshair-bg {
+  background-image: radial-gradient(rgba(15, 23, 42, 0.1) 1px, transparent 1px) !important;
+}
+
+/* ======================================================
+   THEME 4: AZUL OPERACIONAL TÁTICO (TACTICAL BLUE DARK)
+   ====================================================== */
+html[data-theme="tactical-blue"] {
+  background-color: #080d1a;
+  color: #f1f5f9;
+}
+
+html[data-theme="tactical-blue"] body,
+html[data-theme="tactical-blue"] main {
+  background-color: #080d1a !important;
+  color: #f1f5f9 !important;
+}
+
+html[data-theme="tactical-blue"] .bg-zinc-950 {
+  background-color: #050814 !important;
+}
+
+html[data-theme="tactical-blue"] .bg-zinc-900,
+html[data-theme="tactical-blue"] .bg-zinc-900\/80,
+html[data-theme="tactical-blue"] .bg-zinc-900\/90 {
+  background-color: #0f172a !important;
+}
+
+html[data-theme="tactical-blue"] .bg-tactical-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 16, 31, 0.98) 100%) !important;
+  border-color: #1e293b !important;
+}
+
+html[data-theme="tactical-blue"] .border-zinc-800,
+html[data-theme="tactical-blue"] .border-zinc-800\/80,
+html[data-theme="tactical-blue"] .border-zinc-800\/60 {
+  border-color: #1e293b !important;
+}
+
+html[data-theme="tactical-blue"] .tactical-crosshair-bg {
+  background-image: radial-gradient(rgba(56, 189, 248, 0.15) 1px, transparent 1px) !important;
+}
+
+html[data-theme="tactical-blue"] input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="tactical-blue"] select,
+html[data-theme="tactical-blue"] textarea {
+  background-color: #090e1d !important;
+  border-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+html[data-theme="tactical-blue"] aside {
+  background-color: #0b1329 !important;
+  border-right-color: #1e293b !important;
+}
+
+html[data-theme="tactical-blue"] header {
+  background-color: #0b1329 !important;
+  border-bottom-color: #1e293b !important;
+}
+
+
