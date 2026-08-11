@@ -177,8 +177,13 @@ export const PosTab: React.FC<PosTabProps> = ({
                       {isOutOfStock ? 'Esgotado' : `${p.stock} em estoque`}
                     </span>
                   </div>
-                  <h4 className="font-bold text-zinc-200 text-xs line-clamp-2 group-hover:text-amber-400 transition">
-                    {p.name}
+                  <h4 className="font-bold text-zinc-200 text-xs line-clamp-2 group-hover:text-amber-400 transition flex items-center justify-between gap-1">
+                    <span>{p.name}</span>
+                    {p.size && (
+                      <span className="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-1 py-0.2 rounded text-[9px] font-mono shrink-0">
+                        Tam: {p.size}
+                      </span>
+                    )}
                   </h4>
                   <div className="flex justify-between items-center pt-1 border-t border-zinc-800/80">
                     <span className="text-[10px] text-zinc-400">{p.category}</span>

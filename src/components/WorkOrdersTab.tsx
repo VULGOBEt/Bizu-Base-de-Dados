@@ -274,10 +274,14 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
               >
                 <div>
                   {/* Top bar: OS Number + Status */}
-                  <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-3">
+                  <div 
+                    onClick={() => onOpenReceiptModal(os)}
+                    className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-3 cursor-pointer group-hover:border-amber-500/40 transition"
+                  >
                     <div className="flex items-center space-x-2">
-                      <span className="font-bold font-mono text-amber-400 text-sm tracking-wide">
-                        {os.id}
+                      <span className="font-bold font-mono text-amber-400 text-sm tracking-wide flex items-center space-x-1">
+                        <Wrench className="w-3.5 h-3.5 text-amber-500 group-hover:scale-110 transition" />
+                        <span>{os.id}</span>
                       </span>
                       <span className="bg-zinc-800 text-zinc-400 text-[9px] px-2 py-0.5 rounded font-mono">
                         {formatDate(os.date)}
@@ -287,7 +291,10 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
                   </div>
 
                   {/* Customer Military Badge */}
-                  <div className="p-3 bg-zinc-950 rounded-xl border border-zinc-800/80 mb-3">
+                  <div 
+                    onClick={() => onOpenReceiptModal(os)}
+                    className="p-3 bg-zinc-950 hover:bg-zinc-900/90 rounded-xl border border-zinc-800/80 mb-3 cursor-pointer transition"
+                  >
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">
                         {os.force || 'Militar'}
@@ -356,6 +363,15 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
                   {/* Quick Action Buttons */}
                   <div className="flex items-center justify-between gap-1.5 flex-wrap">
                     <div className="flex items-center space-x-1">
+                      <button
+                        onClick={() => onOpenDetailModal(os)}
+                        title="Ver Ficha Completa da OS"
+                        className="px-2.5 py-1.5 bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/30 rounded-lg text-xs font-bold flex items-center space-x-1 transition cursor-pointer"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        <span className="text-[11px]">Ver Ficha</span>
+                      </button>
+
                       <button
                         onClick={() => onOpenReceiptModal(os)}
                         title="Imprimir Comprovante / OS"

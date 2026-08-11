@@ -189,7 +189,14 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({
                   return (
                     <tr key={p.id} className="hover:bg-zinc-900/60 transition">
                       <td className="p-4 font-medium text-zinc-100">
-                        <div className="font-bold text-zinc-200">{p.name}</div>
+                        <div className="font-bold text-zinc-200 flex items-center space-x-2">
+                          <span>{p.name}</span>
+                          {p.size && (
+                            <span className="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0">
+                              Tam: {p.size}
+                            </span>
+                          )}
+                        </div>
                         <div className="text-[11px] text-zinc-500 font-mono">
                           SKU: {p.sku} {p.code ? `• Cód: ${p.code}` : ''} {p.supplier ? '• ' + p.supplier : ''}
                         </div>

@@ -1,12 +1,27 @@
 import { Product, MilitaryProfile, Order, Activity, ServiceOrder, StoreConfig, UserPermission, StockMovement } from '../types';
 
+export const PRODUCT_CATEGORIES = [
+  'Fardamento & Gandolas',
+  'Vestuário & Camisas',
+  'Calças & Bermudas',
+  'Calçados & Coturnos',
+  'Coletes & Porta-Placas',
+  'Cintos & Cinturões',
+  'Mochilas & Bolsas',
+  'Bordados & Tarjetas',
+  'Insígnias & Divisas',
+  'Acessórios & Lanternas',
+  'Coldres & Equipamentos',
+  'Outros / Personalizado'
+];
+
 export const INITIAL_PRODUCTS: Product[] = [
-  { id: '1', sku: 'TAC-001', code: '1001', name: 'Coturno Tático Airstep Ripstop 42', category: 'Calçados', costPrice: 220.00, salePrice: 389.90, stock: 12, minStock: 4, supplier: 'Airstep', location: 'Prateleira A1' },
-  { id: '2', sku: 'TAC-002', code: '1002', name: 'Cinto Tático Operacional Níquel 40mm', category: 'Cintos & Acessórios', costPrice: 35.00, salePrice: 89.90, stock: 25, minStock: 5, supplier: 'Bélica', location: 'Arara B2' },
-  { id: '3', sku: 'TAC-003', code: '1003', name: 'Calça Tática Ripstop Camuflada EB Tam 44', category: 'Vestuário', costPrice: 95.00, salePrice: 189.00, stock: 3, minStock: 5, supplier: 'Invictus', location: 'Gaveta V1' },
-  { id: '4', sku: 'TAC-004', code: '1004', name: 'Mochila Tática Modular 45L Pretas', category: 'Mochilas', costPrice: 140.00, salePrice: 279.90, stock: 8, minStock: 3, supplier: 'Invictus', location: 'Prateleira M3' },
-  { id: '5', sku: 'TAC-005', code: '1005', name: 'Farda Operacional PM Completa Tam G', category: 'Vestuário', costPrice: 180.00, salePrice: 320.00, stock: 2, minStock: 4, supplier: 'Confecção Militar', location: 'Gaveta V2' },
-  { id: '6', sku: 'TAC-006', code: '1006', name: 'Coldre de Perna Velado Neoprene G2c', category: 'Coldres', costPrice: 28.00, salePrice: 65.00, stock: 18, minStock: 6, supplier: 'Bélica', location: 'Painel C1' }
+  { id: '1', sku: 'TAC-001', code: '1001', name: 'Coturno Tático Airstep Ripstop 42', category: 'Calçados & Coturnos', size: '42', costPrice: 220.00, salePrice: 389.90, stock: 12, minStock: 4, supplier: 'Airstep', location: 'Prateleira A1' },
+  { id: '2', sku: 'TAC-002', code: '1002', name: 'Cinto Tático Operacional Níquel 40mm', category: 'Cintos & Cinturões', size: 'Único', costPrice: 35.00, salePrice: 89.90, stock: 25, minStock: 5, supplier: 'Bélica', location: 'Arara B2' },
+  { id: '3', sku: 'TAC-003', code: '1003', name: 'Calça Tática Ripstop Camuflada EB Tam 44', category: 'Calças & Bermudas', size: '44', costPrice: 95.00, salePrice: 189.00, stock: 3, minStock: 5, supplier: 'Invictus', location: 'Gaveta V1' },
+  { id: '4', sku: 'TAC-004', code: '1004', name: 'Mochila Tática Modular 45L Pretas', category: 'Mochilas & Bolsas', size: '45L', costPrice: 140.00, salePrice: 279.90, stock: 8, minStock: 3, supplier: 'Invictus', location: 'Prateleira M3' },
+  { id: '5', sku: 'TAC-005', code: '1005', name: 'Farda Operacional PM Completa Tam G', category: 'Fardamento & Gandolas', size: 'G', costPrice: 180.00, salePrice: 320.00, stock: 2, minStock: 4, supplier: 'Confecção Militar', location: 'Gaveta V2' },
+  { id: '6', sku: 'TAC-006', code: '1006', name: 'Coldre de Perna Velado Neoprene G2c', category: 'Coldres & Equipamentos', size: 'Padrão', costPrice: 28.00, salePrice: 65.00, stock: 18, minStock: 6, supplier: 'Bélica', location: 'Painel C1' }
 ];
 
 export const BLOOD_TYPES = [
