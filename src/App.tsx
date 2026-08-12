@@ -643,7 +643,7 @@ export default function App() {
             />
           )}
 
-          {(currentTab === 'service-orders' || currentTab === 'pos') && (
+          {currentTab === 'service-orders' && (
             <WorkOrdersTab
               orders={serviceOrders}
               onOpenNewOsModal={handleOpenNewOsModal}
@@ -652,15 +652,6 @@ export default function App() {
               onOpenReceiptModal={handleOpenOsReceipt}
               onUpdateOsStatus={handleUpdateOsStatus}
               onDeleteOs={handleDeleteServiceOrder}
-              posProducts={products}
-              posCart={cart}
-              activeUser={activeUser}
-              onAddToCart={handleAddToCart}
-              onUpdateCartQty={handleUpdateCartQty}
-              onClearCart={handleClearCart}
-              onConfirmOrder={handleConfirmOrder}
-              onShowToast={showToast}
-              activeSubView={currentTab === 'pos' ? 'POS' : undefined}
             />
           )}
 

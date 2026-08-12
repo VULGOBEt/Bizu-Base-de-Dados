@@ -157,73 +157,26 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Top Unified Mode Switcher Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-zinc-950 p-2.5 rounded-2xl border border-zinc-800 shadow-xl">
-        <div className="flex items-center space-x-2 bg-zinc-900 p-1 rounded-xl border border-zinc-800">
-          <button
-            onClick={() => setSubView('LIST')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition flex items-center space-x-2 cursor-pointer ${
-              currentSubView === 'LIST'
-                ? 'bg-amber-500 text-black shadow-md'
-                : 'text-zinc-400 hover:text-white'
-            }`}
-          >
-            <FileText className="w-4 h-4" />
-            <span>Lista de Pedidos ({orders.length})</span>
-          </button>
-
-          <button
-            onClick={() => setSubView('POS')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition flex items-center space-x-2 cursor-pointer ${
-              currentSubView === 'POS'
-                ? 'bg-emerald-500 text-black shadow-md'
-                : 'text-zinc-400 hover:text-white'
-            }`}
-          >
-            <Crosshair className="w-4 h-4" />
-            <span>Realizar Pedido (PDV)</span>
-          </button>
+      {/* Header Banner */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-zinc-900/80 p-5 rounded-2xl border border-zinc-800/80">
+        <div>
+          <h2 className="text-xl font-bold text-white font-tactical tracking-wider flex items-center gap-2">
+            <Wrench className="w-6 h-6 text-amber-500" />
+            <span>PEDIDOS</span>
+          </h2>
+          <p className="text-xs text-zinc-400 mt-1">
+            Central unificada para acompanhamento e gestão de pedidos e ordens de serviço.
+          </p>
         </div>
 
-        {currentSubView === 'LIST' && (
-          <button
-            onClick={onOpenNewOsModal}
-            className="bg-amber-500 hover:bg-amber-400 text-black font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2 shadow-lg shadow-amber-500/10 cursor-pointer shrink-0"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Nova Ordem de Serviço (OS)</span>
-          </button>
-        )}
+        <button
+          onClick={onOpenNewOsModal}
+          className="bg-amber-500 hover:bg-amber-400 text-black font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2 shadow-lg shadow-amber-500/10 cursor-pointer shrink-0"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Nova Ordem de Serviço (OS)</span>
+        </button>
       </div>
-
-      {currentSubView === 'POS' && posProducts ? (
-        <PosTab
-          products={posProducts}
-          cart={posCart || []}
-          activeUser={activeUser}
-          onAddToCart={onAddToCart || (() => {})}
-          onUpdateCartQty={onUpdateCartQty || (() => {})}
-          onClearCart={onClearCart || (() => {})}
-          onConfirmOrder={(data) => {
-            if (onConfirmOrder) onConfirmOrder(data);
-            setSubView('LIST');
-          }}
-          onShowToast={onShowToast || (() => {})}
-        />
-      ) : (
-        <>
-          {/* Header Banner */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-zinc-900/80 p-5 rounded-2xl border border-zinc-800/80">
-            <div>
-              <h2 className="text-xl font-bold text-white font-tactical tracking-wider flex items-center gap-2">
-                <Wrench className="w-6 h-6 text-amber-500" />
-                <span>PEDIDOS</span>
-              </h2>
-              <p className="text-xs text-zinc-400 mt-1">
-                Central unificada para emissão e acompanhamento de pedidos do arsenal e ordens de serviço.
-              </p>
-            </div>
-          </div>
 
       {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -516,8 +469,6 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
             );
           })}
         </div>
-      )}
-        </>
       )}
     </div>
   );
