@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, MessageCircle, Eye, ShoppingBag, X, User, Printer, Shield } from 'lucide-react';
+import { Search, MessageCircle, Eye, ShoppingBag, X, User, Printer, Shield, FileText } from 'lucide-react';
 import { Order } from '../types';
 import { formatBRL, formatDate } from '../utils/formatters';
 import { generateOrderWhatsAppText, openWhatsApp } from '../utils/whatsapp';
@@ -78,13 +78,15 @@ export const SalesHistoryTab: React.FC<SalesHistoryTabProps> = ({ sales, onOpenR
               ) : (
                 filteredSales.map((s) => (
                   <tr key={s.id} className="hover:bg-zinc-900/80 transition group">
-                    <td className="p-4 font-mono font-bold text-amber-400 text-xs">#{s.id}</td>
+                    <td 
+                      onClick={() => onOpenReceipt(s)}
+                      className="p-4 font-mono font-bold text-amber-400 text-xs cursor-pointer hover:underline"
+                    >
+                      #{s.id}
+                    </td>
                     <td className="p-4 text-xs text-zinc-400 font-mono">{formatDate(s.date)}</td>
                     <td 
-                      onClick={() => {
-                        setSelectedOrder(s);
-                        setCustomPhone(s.phone || '');
-                      }}
+                      onClick={() => onOpenReceipt(s)}
                       className="p-4 font-medium text-zinc-100 cursor-pointer group-hover:text-amber-400 transition"
                     >
                       <div className="font-bold text-zinc-200 group-hover:text-amber-400 flex items-center space-x-1">
@@ -110,18 +112,6 @@ export const SalesHistoryTab: React.FC<SalesHistoryTabProps> = ({ sales, onOpenR
                     <td className="p-4 text-center">
                       <div className="flex items-center justify-center space-x-1.5">
                         <button
-                          onClick={() => {
-                            setSelectedOrder(s);
-                            setCustomPhone(s.phone || '');
-                          }}
-                          title="Visualizar Ficha do Militar e Detalhes"
-                          className="bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/30 text-xs px-2.5 py-1.5 rounded-lg transition font-bold flex items-center space-x-1 cursor-pointer"
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                          <span className="hidden md:inline">Ver Ficha</span>
-                        </button>
-
-                        <button
                           onClick={() => handleQuickWhatsApp(s)}
                           title="Enviar via WhatsApp"
                           className="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 text-xs px-2.5 py-1.5 rounded-lg transition font-bold flex items-center space-x-1 cursor-pointer"
@@ -132,10 +122,11 @@ export const SalesHistoryTab: React.FC<SalesHistoryTabProps> = ({ sales, onOpenR
 
                         <button
                           onClick={() => onOpenReceipt(s)}
-                          title="Imprimir Comprovante Completo"
-                          className="bg-zinc-800 hover:bg-amber-500 hover:text-black text-amber-400 text-xs px-2.5 py-1.5 rounded-lg transition font-bold uppercase cursor-pointer"
+                          title="Visualizar Ficha / Comprovante Completo"
+                          className="bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/30 text-xs px-3 py-1.5 rounded-lg transition font-bold uppercase cursor-pointer flex items-center space-x-1"
                         >
-                          Comprovante
+                          <FileText className="w-3.5 h-3.5" />
+                          <span>Ver Ficha / Comprovante</span>
                         </button>
                       </div>
                     </td>

@@ -60,9 +60,8 @@ export function generateOsWhatsAppText(os: ServiceOrder): string {
 ${isReady ? 'Seu equipamento já está pronto para retirada no nosso arsenal! 🪖' : 'Acompanhe seu pedido pelo nosso atendimento.'}`;
 }
 
-export function openWhatsApp(phone: string, text: string) {
+export function openWhatsApp(phone: string, text?: string) {
   const cleanNum = sanitizePhone(phone);
-  const encodedText = encodeURIComponent(text);
-  const url = cleanNum ? `https://wa.me/${cleanNum}?text=${encodedText}` : `https://wa.me/?text=${encodedText}`;
+  const url = cleanNum ? `https://wa.me/${cleanNum}` : `https://wa.me/`;
   window.open(url, '_blank');
 }

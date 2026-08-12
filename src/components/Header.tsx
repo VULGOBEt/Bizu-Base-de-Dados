@@ -40,7 +40,7 @@ export const Header: React.FC<HeaderProps> = ({
     products: ['Arsenal & Estoque', 'Gerencie todos os itens do arsenal com alertas de reposição'],
     movements: ['Movimentações de Estoque', 'Histórico auditável de entradas, saídas e ajustes do arsenal'],
     pos: ['Pedido Militar (POS)', 'Selecione equipamentos, aplique descontos e configure os dados do militar'],
-    'service-orders': ['Ordens de Serviço - Oficina Tática', 'Gestão de bordados de tarjetas, costura, insígnias e customizações'],
+    'service-orders': ['Pedidos', 'Gestão unificada de pedidos do arsenal e ordens de serviço'],
     sales: ['Histórico de Pedidos & Cautelas', 'Consulte todas as baixas registradas com dados do militar'],
     reports: ['Relatórios & Estatísticas Táticas', 'Análise gráfica do arsenal e demandas mais baixadas'],
     settings: ['Configurações do Sistema', 'Dados da loja BIZÚ, gestão de operadores, backup e parâmetros'],
@@ -72,15 +72,6 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       <div className="flex items-center space-x-2 sm:space-x-3">
-        {onOpenNewOrder && (
-          <button
-            onClick={onOpenNewOrder}
-            className="bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold uppercase tracking-wider px-3 py-2 rounded-lg flex items-center space-x-1.5 transition shadow-md shadow-amber-500/10 cursor-pointer"
-          >
-            <PlusCircle className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Novo Pedido</span>
-          </button>
-        )}
         <button
           onClick={onOpenQuickSell}
           className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider px-3 py-2 rounded-lg flex items-center space-x-1.5 transition shadow-md shadow-emerald-600/20 border border-emerald-400/30 cursor-pointer"
@@ -88,17 +79,17 @@ export const Header: React.FC<HeaderProps> = ({
           <Zap className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Baixa Rápida</span>
         </button>
-        <div className="hidden sm:flex items-center space-x-2.5 bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 border border-amber-500/30 px-3.5 py-1.5 rounded-xl shadow-lg shadow-amber-500/5 group hover:border-amber-500/60 transition">
+        <div className="hidden sm:flex items-center space-x-3 bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 border border-amber-500/40 px-4 py-2 rounded-xl shadow-lg shadow-amber-500/10 group hover:border-amber-500/80 transition">
           <div className="relative flex items-center justify-center">
-            <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
           </div>
-          <Clock className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-12 transition-transform" />
+          <Clock className="w-5 h-5 text-amber-400 group-hover:rotate-12 transition-transform" />
           <div className="flex flex-col text-right leading-none">
-            <span className="text-xs font-mono font-bold text-amber-400 tracking-wider drop-shadow-[0_0_8px_rgba(245,158,11,0.3)]">
+            <span className="text-base sm:text-lg font-mono font-bold text-amber-400 tracking-wider drop-shadow-[0_0_10px_rgba(245,158,11,0.4)]">
               {timeStr}
             </span>
-            <span className="text-[9px] font-mono text-zinc-400 tracking-tight mt-0.5">
+            <span className="text-[10px] font-mono text-zinc-400 tracking-tight mt-0.5">
               {dateStr} • HORA BSB
             </span>
           </div>

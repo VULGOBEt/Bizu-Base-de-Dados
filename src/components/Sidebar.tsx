@@ -41,30 +41,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ) : null,
     },
     {
-      id: 'pos',
-      label: 'Pedido',
-      icon: <Crosshair className="w-4 h-4 text-emerald-400" />,
-      show: true,
-      badge: (
-        <span className="ml-auto bg-emerald-500/20 text-emerald-400 text-[9px] px-1.5 py-0.5 rounded font-bold">
-          MILITAR
-        </span>
-      ),
-    },
-    {
       id: 'service-orders',
-      label: 'Ordens de Serviço',
-      icon: <Wrench className="w-4 h-4 text-amber-400" />,
+      label: 'Pedidos',
+      icon: <Crosshair className="w-4 h-4 text-amber-400" />,
       show: true,
       badge: activeOsCount > 0 ? (
         <span className="ml-auto bg-amber-500 text-black text-[10px] px-2 py-0.5 rounded-full font-bold shadow-sm">
-          {activeOsCount} OS
+          {activeOsCount}
         </span>
-      ) : (
-        <span className="ml-auto bg-zinc-800 text-zinc-400 text-[9px] px-1.5 py-0.5 rounded border border-zinc-700">
-          OFICINA
-        </span>
-      ),
+      ) : null,
     },
     {
       id: 'sales',

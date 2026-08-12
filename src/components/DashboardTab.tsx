@@ -1,11 +1,13 @@
 import React from 'react';
-import { Layers, DollarSign, AlertTriangle, ShoppingBag, BellRing, Activity as ActivityIcon, ShieldCheck, Plus } from 'lucide-react';
-import { Product, Order, Activity, TabType } from '../types';
+import { Layers, DollarSign, AlertTriangle, ShoppingBag, BellRing, Activity as ActivityIcon, ShieldCheck, Plus, Clock } from 'lucide-react';
+import { Product, Order, Activity, TabType, ServiceOrder } from '../types';
 import { formatBRL, formatDate } from '../utils/formatters';
 
 interface DashboardTabProps {
   products: Product[];
   sales: Order[];
+  serviceOrders?: ServiceOrder[];
+  pendingOrdersCount?: number;
   activities: Activity[];
   onSwitchTab: (tab: TabType) => void;
   onOpenAdjustModal: (productId: string) => void;
@@ -14,13 +16,18 @@ interface DashboardTabProps {
 export const DashboardTab: React.FC<DashboardTabProps> = ({
   products = [],
   sales = [],
+  serviceOrders = [],
+  pendingOrdersCount,
   activities = [],
   onSwitchTab,
   onOpenAdjustModal,
 }) => {
-  const totalItems = products.reduce((acc, p) => acc + Number(p.stock), 0);
   const totalValue = products.reduce((acc, p) => acc + Number(p.stock) * Number(p.salePrice), 0);
   const lowStockProducts = products.filter((p) => Number(p.stock) <= Number(p.minStock));
+
+  const uncompletedCount = pendingOrdersCount !== undefined
+    ? pendingOrdersCount
+    : serviceOrders.filter((os) => os.status !== 'CONCLUIDO' && os.status !== 'CANCELADO').length;
 
   const now = new Date();
   const currentMonthSales = sales.filter((s) => {
@@ -33,14 +40,17 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
     <div className="space-y-6">
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-tactical-card border border-zinc-800 p-5 rounded-2xl flex items-center justify-between relative overflow-hidden group hover:border-zinc-700 transition">
+        <div 
+          onClick={() => onSwitchTab('service-orders')}
+          className="bg-tactical-card border border-zinc-800 p-5 rounded-2xl flex items-center justify-between relative overflow-hidden group hover:border-zinc-700 transition cursor-pointer"
+        >
           <div className="space-y-1">
-            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Itens em Arsenal</p>
-            <h3 className="text-2xl font-bold text-white font-tactical">{totalItems}</h3>
-            <p className="text-[11px] text-zinc-500 font-mono">{products.length} SKUs cadastrados</p>
+            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Pedidos Não Concluídos</p>
+            <h3 className="text-2xl font-bold text-amber-400 font-tactical">{uncompletedCount}</h3>
+            <p className="text-[11px] text-zinc-500 font-mono">Em andamento / aguardando</p>
           </div>
-          <div className="p-3 bg-zinc-800/80 text-amber-400 border border-zinc-700/60 rounded-xl group-hover:scale-110 transition-transform">
-            <Layers className="w-6 h-6" />
+          <div className="p-3 bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded-xl group-hover:scale-110 transition-transform">
+            <Clock className="w-6 h-6" />
           </div>
         </div>
 

@@ -625,6 +625,7 @@ export default function App() {
             <DashboardTab
               products={products}
               sales={sales}
+              pendingOrdersCount={activeOsCount}
               activities={activities}
               onSwitchTab={setCurrentTab}
               onOpenAdjustModal={handleOpenAdjustModal}
@@ -642,27 +643,24 @@ export default function App() {
             />
           )}
 
-          {currentTab === 'pos' && (
-            <PosTab
-              products={products}
-              cart={cart}
+          {(currentTab === 'service-orders' || currentTab === 'pos') && (
+            <WorkOrdersTab
+              orders={serviceOrders}
+              onOpenNewOsModal={handleOpenNewOsModal}
+              onOpenEditOsModal={handleOpenEditOsModal}
+              onOpenDetailModal={handleOpenOsReceipt}
+              onOpenReceiptModal={handleOpenOsReceipt}
+              onUpdateOsStatus={handleUpdateOsStatus}
+              onDeleteOs={handleDeleteServiceOrder}
+              posProducts={products}
+              posCart={cart}
               activeUser={activeUser}
               onAddToCart={handleAddToCart}
               onUpdateCartQty={handleUpdateCartQty}
               onClearCart={handleClearCart}
               onConfirmOrder={handleConfirmOrder}
               onShowToast={showToast}
-            />
-          )}
-
-          {currentTab === 'service-orders' && (
-            <WorkOrdersTab
-              orders={serviceOrders}
-              onOpenNewOsModal={handleOpenNewOsModal}
-              onOpenEditOsModal={handleOpenEditOsModal}
-              onOpenReceiptModal={handleOpenOsReceipt}
-              onUpdateOsStatus={handleUpdateOsStatus}
-              onDeleteOs={handleDeleteServiceOrder}
+              activeSubView={currentTab === 'pos' ? 'POS' : undefined}
             />
           )}
 
