@@ -4,7 +4,6 @@ import { Header } from './components/Header';
 import { DashboardTab } from './components/DashboardTab';
 import { ProductsTab } from './components/ProductsTab';
 import { PosTab } from './components/PosTab';
-import { SalesHistoryTab } from './components/SalesHistoryTab';
 import { WorkOrdersTab } from './components/WorkOrdersTab';
 import { SettingsTab } from './components/SettingsTab';
 
@@ -658,16 +657,6 @@ export default function App() {
               onOpenReceiptModal={handleOpenOsReceipt}
               onUpdateOsStatus={handleUpdateOsStatus}
               onDeleteOs={handleDeleteServiceOrder}
-            />
-          )}
-
-          {currentTab === 'sales' && (
-            <SalesHistoryTab
-              sales={sales}
-              onOpenReceipt={(order) => {
-                setCurrentReceiptOrder(order);
-                setIsReceiptModalOpen(true);
-              }}
             />
           )}
 

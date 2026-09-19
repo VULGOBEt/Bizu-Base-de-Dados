@@ -14,8 +14,6 @@ import {
   MessageCircle,
   PackageCheck,
   Package,
-  Table as TableIcon,
-  LayoutGrid,
   ChevronRight,
   Send,
   ArrowRight
@@ -55,7 +53,6 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   // 1. FILTRO DE STATUS RÁPIDO: Padrão exibe apenas as OS em aberto ("Pendente" e "Em Produção")
   const [statusFilter, setStatusFilter] = useState<'ATIVAS' | 'PRONTAS' | 'HISTORICO' | 'TODAS'>('ATIVAS');
-  const [viewMode, setViewMode] = useState<'TABLE' | 'GRID'>('TABLE');
 
   // Contagens dos filtros rápidos
   const ativasCount = orders.filter((o) => o.status === 'NOVO' || o.status === 'EM_SEPARACAO').length;
@@ -226,30 +223,6 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
         </div>
 
         <div className="flex items-center space-x-2">
-          {/* Alternador de Visualização (Tabela / Cards) */}
-          <div className="bg-zinc-950 border border-zinc-800 rounded-xl p-1 flex items-center space-x-1">
-            <button
-              onClick={() => setViewMode('TABLE')}
-              title="Visualização em Tabela"
-              className={`p-2 rounded-lg text-xs font-semibold flex items-center space-x-1 transition cursor-pointer ${
-                viewMode === 'TABLE' ? 'bg-amber-500 text-black font-bold' : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              <TableIcon className="w-4 h-4" />
-              <span className="hidden sm:inline text-[11px]">Tabela</span>
-            </button>
-            <button
-              onClick={() => setViewMode('GRID')}
-              title="Visualização em Mosaico / Cards"
-              className={`p-2 rounded-lg text-xs font-semibold flex items-center space-x-1 transition cursor-pointer ${
-                viewMode === 'GRID' ? 'bg-amber-500 text-black font-bold' : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              <LayoutGrid className="w-4 h-4" />
-              <span className="hidden sm:inline text-[11px]">Cards</span>
-            </button>
-          </div>
-
           <button
             onClick={handleOpenNewOs}
             className="bg-amber-500 hover:bg-amber-400 text-black font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2 shadow-lg shadow-amber-500/10 cursor-pointer shrink-0"
@@ -419,181 +392,9 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
             <span>Criar Nova OS</span>
           </button>
         </div>
-      ) : viewMode === 'TABLE' ? (
-        /* ============================================================
-           TABELA PRINCIPAL DE ORDENS DE SERVIÇO COM COLUNA DE AÇÕES
-           ============================================================ */
-        <div className="bg-zinc-900/70 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-zinc-950/80 border-b border-zinc-800 text-[10px] font-bold text-zinc-400 uppercase tracking-wider font-mono">
-                  <th className="py-3.5 px-4">Nº OS / DATA</th>
-                  <th className="py-3.5 px-4">CLIENTE / MILITAR</th>
-                  <th className="py-3.5 px-4">MATERIAL & ESPECIFICAÇÃO</th>
-                  <th className="py-3.5 px-4">VALOR / SALDO</th>
-                  <th className="py-3.5 px-4 text-center">STATUS</th>
-                  <th className="py-3.5 px-4 text-right">AÇÕES</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-zinc-800/60 font-sans">
-                {filteredOrders.map((os) => {
-                  const balanceDue = os.value - os.deposit;
-                  const isPaid = balanceDue <= 0;
-                  const whatsAppUrl = buildOsWhatsAppUrl(os);
-
-                  return (
-                    <tr
-                      key={os.id}
-                      className="hover:bg-zinc-800/40 transition-colors group"
-                    >
-                      {/* Nº OS & Data */}
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <div
-                          onClick={() => onOpenReceiptModal(os)}
-                          className="cursor-pointer"
-                          title="Clique para ver o comprovante"
-                        >
-                          <div className="font-bold font-mono text-amber-400 text-sm flex items-center space-x-1 group-hover:text-amber-300">
-                            <Wrench className="w-3.5 h-3.5 text-amber-500" />
-                            <span>{os.id}</span>
-                          </div>
-                          <div className="text-[11px] text-zinc-500 font-mono mt-0.5">
-                            {formatDate(os.date)}
-                          </div>
-                        </div>
-                      </td>
-
-                      {/* Cliente / Militar */}
-                      <td className="py-3.5 px-4">
-                        <div
-                          onClick={() => onOpenReceiptModal(os)}
-                          className="cursor-pointer"
-                        >
-                          <div className="font-bold text-white text-xs font-tactical tracking-wide">
-                            {os.soldado || os.warName || 'Militar'}
-                          </div>
-                          <div className="text-[11px] text-zinc-400 flex items-center space-x-1 mt-0.5">
-                            <span className="text-amber-500 font-semibold">{os.force || 'Militar'}</span>
-                            {os.phone && <span className="text-zinc-500 font-mono">• {os.phone}</span>}
-                          </div>
-                          {os.battalion && (
-                            <div className="text-[10px] text-zinc-500 font-mono mt-0.5">
-                              {os.battalion}
-                            </div>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* Material & Especificação */}
-                      <td className="py-3.5 px-4 max-w-xs">
-                        <div className="font-semibold text-zinc-100 text-xs">
-                          {os.itemDescription || 'Material entregue para oficina'}
-                        </div>
-                        {os.specifications && (
-                          <div className="text-[10px] text-amber-400/90 italic truncate mt-0.5" title={os.specifications}>
-                            "{os.specifications}"
-                          </div>
-                        )}
-                        {os.items && os.items.length > 0 && (
-                          <div className="mt-1.5 flex flex-wrap gap-1">
-                            {os.items.map((it, idx) => (
-                              <span
-                                key={idx}
-                                className="inline-flex items-center gap-1 text-[10px] font-mono bg-amber-500/10 text-amber-300 border border-amber-500/25 px-1.5 py-0.5 rounded"
-                              >
-                                <Package className="w-2.5 h-2.5 text-amber-400" />
-                                <span>{it.qty}x {it.name}</span>
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </td>
-
-                      {/* Valor / Saldo */}
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <div className="font-bold text-white font-mono text-xs">
-                          {formatBRL(os.value)}
-                        </div>
-                        <div className="mt-0.5">
-                          {isPaid ? (
-                            <span className="text-[10px] font-bold text-emerald-400 font-mono bg-emerald-500/10 px-1.5 py-0.5 rounded">
-                              PAGO
-                            </span>
-                          ) : (
-                            <span className="text-[10px] font-bold text-amber-400 font-mono bg-amber-500/10 px-1.5 py-0.5 rounded">
-                              Resta {formatBRL(balanceDue)}
-                            </span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* Status com Badge Colorida */}
-                      <td className="py-3.5 px-4 text-center whitespace-nowrap">
-                        {renderStatusBadge(os.status)}
-                      </td>
-
-                      {/* 4. COLUNA DE AÇÕES COM BOTÃO DO WHATSAPP DIRETO */}
-                      <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end space-x-1.5">
-                          {/* Botão de Avanço Rápido de Status */}
-                          {renderNextStatusAction(os)}
-
-                          {/* 4. BOTÃO DE WHATSAPP DIRETO NA TABELA */}
-                          <a
-                            href={whatsAppUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="Abrir conversa no WhatsApp"
-                            className="p-1.5 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/40 rounded-lg text-xs font-semibold inline-flex items-center space-x-1 transition cursor-pointer shadow-sm"
-                          >
-                            <MessageCircle className="w-3.5 h-3.5 shrink-0" />
-                            <span className="text-[11px] font-bold hidden md:inline">WhatsApp</span>
-                          </a>
-
-                          {/* Botão de Impressão / Comprovante */}
-                          <button
-                            onClick={() => onOpenReceiptModal(os)}
-                            title="Imprimir Comprovante / Ficha de Oficina"
-                            className="p-1.5 text-zinc-400 hover:text-amber-400 hover:bg-zinc-800 rounded-lg transition cursor-pointer"
-                          >
-                            <Printer className="w-3.5 h-3.5" />
-                          </button>
-
-                          {/* Botão Editar OS */}
-                          <button
-                            onClick={() => onOpenEditOsModal(os)}
-                            title="Editar Ordem de Serviço"
-                            className="p-1.5 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition cursor-pointer"
-                          >
-                            <Edit2 className="w-3.5 h-3.5" />
-                          </button>
-
-                          {/* Botão Excluir OS */}
-                          <button
-                            onClick={() => onDeleteOs(os.id)}
-                            title="Excluir Ordem de Serviço"
-                            className="p-1.5 text-zinc-400 hover:text-rose-400 hover:bg-zinc-800 rounded-lg transition cursor-pointer"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="p-3 bg-zinc-950/60 border-t border-zinc-800 flex items-center justify-between text-[11px] text-zinc-500 font-mono">
-            <span>Mostrando {filteredOrders.length} ordens de serviço</span>
-            <span>BIZÚ Artigos Militares & Customização Tática</span>
-          </div>
-        </div>
       ) : (
         /* ============================================================
-           VISUALIZAÇÃO EM MOSAICO / CARDS
+           VISUALIZAÇÃO EM CARDS
            ============================================================ */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredOrders.map((os) => {

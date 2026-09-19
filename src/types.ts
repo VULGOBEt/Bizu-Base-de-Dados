@@ -179,7 +179,6 @@ export type TabType =
   | 'dashboard'
   | 'products'
   | 'pos'
-  | 'sales'
   | 'service-orders'
   | 'movements'
   | 'settings';

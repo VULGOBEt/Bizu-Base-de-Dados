@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Box, Crosshair, FileText, UserCheck, PlusCircle, Download, Wrench, Settings } from 'lucide-react';
+import { Shield, Box, Crosshair, UserCheck, PlusCircle, Download, Wrench, Settings } from 'lucide-react';
 import { TabType, UserPermission } from '../types';
 import bizuLogo from '../assets/images/bizu_tactical_shield_1786484872892.jpg';
 
@@ -50,12 +50,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {activeOsCount}
         </span>
       ) : null,
-    },
-    {
-      id: 'sales',
-      label: 'Histórico de Pedidos',
-      icon: <FileText className="w-4 h-4" />,
-      show: true,
     },
     {
       id: 'settings',

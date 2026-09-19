@@ -177,10 +177,10 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({ isOpen, order, onClo
           <button
             onClick={handlePrint}
             className="flex-1 bg-amber-500 hover:bg-amber-400 text-black py-2.5 rounded-xl text-xs font-bold uppercase transition flex items-center justify-center space-x-1.5 cursor-pointer shadow-lg shadow-amber-500/15"
-            title="Imprimir Ficha em formato de comprovante (ou salvar em PDF)"
+            title="Imprimir Ficha em formato de comprovante"
           >
             <Printer className="w-3.5 h-3.5" />
-            <span>Imprimir Ficha (PDF)</span>
+            <span>Imprimir Ficha</span>
           </button>
           <button
             onClick={onClose}

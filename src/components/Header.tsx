@@ -44,7 +44,6 @@ export const Header: React.FC<HeaderProps> = ({
     movements: 'Movimentações de Estoque',
     pos: 'Pedido Militar (POS)',
     'service-orders': 'Ordens de Serviço',
-    sales: 'Histórico de Pedidos & Cautelas',
     settings: 'Configurações do Sistema',
   };
 

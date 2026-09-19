@@ -242,10 +242,10 @@ export const ServiceOrderReceiptModal: React.FC<ServiceOrderReceiptModalProps> =
             <button
               onClick={handlePrint}
               className="flex-1 sm:flex-initial bg-amber-500 hover:bg-amber-400 text-black font-bold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2 cursor-pointer shadow-lg shadow-amber-500/15"
-              title="Imprimir esta ficha em formato de comprovante (ou salvar em PDF)"
+              title="Imprimir esta ficha em formato de comprovante"
             >
               <Printer className="w-4 h-4" />
-              <span>Imprimir Ficha (PDF)</span>
+              <span>Imprimir Ficha</span>
             </button>
 
             <button
