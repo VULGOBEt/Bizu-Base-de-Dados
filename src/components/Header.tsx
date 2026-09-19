@@ -40,10 +40,10 @@ export const Header: React.FC<HeaderProps> = ({
 
   const tabTitles: Record<TabType, string> = {
     dashboard: 'Painel Tático Geral',
-    products: 'Arsenal & Estoque',
+    products: 'Arsenal',
     movements: 'Movimentações de Estoque',
     pos: 'Pedido Militar (POS)',
-    'service-orders': 'Ordens de Serviço',
+    'service-orders': 'Pedidos',
     settings: 'Configurações do Sistema',
   };
 

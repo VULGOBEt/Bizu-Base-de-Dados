@@ -51,24 +51,21 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
   onDeleteOs,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  // 1. FILTRO DE STATUS RÁPIDO: Padrão exibe apenas as OS em aberto ("Pendente" e "Em Produção")
-  const [statusFilter, setStatusFilter] = useState<'ATIVAS' | 'PRONTAS' | 'HISTORICO' | 'TODAS'>('ATIVAS');
+  // 1. FILTRO DE STATUS RÁPIDO: Padrão exibe as OS "Em Separação"
+  const [statusFilter, setStatusFilter] = useState<'SEPARACAO' | 'ENTREGUES' | 'CONCLUIDAS' | 'TODAS'>('SEPARACAO');
 
   // Contagens dos filtros rápidos
-  const ativasCount = orders.filter((o) => o.status === 'NOVO' || o.status === 'EM_SEPARACAO').length;
-  const prontasCount = orders.filter((o) => o.status === 'SEPARADO').length;
-  const historicoCount = orders.filter((o) => o.status === 'ENTREGUE' || o.status === 'CONCLUIDO' || o.status === 'CANCELADO').length;
+  const separacaoCount = orders.filter((o) => o.status === 'EM_SEPARACAO' || (o.status as string) === 'NOVO').length;
+  const entreguesCount = orders.filter((o) => o.status === 'ENTREGUE' || (o.status as string) === 'SEPARADO').length;
+  const concluidasCount = orders.filter((o) => o.status === 'CONCLUIDO' || o.status === 'CANCELADO').length;
   const todasCount = orders.length;
-
-  const novoCount = orders.filter((o) => o.status === 'NOVO').length;
-  const producaoCount = orders.filter((o) => o.status === 'EM_SEPARACAO').length;
 
   const totalPendingBalance = orders
     .filter((o) => o.status !== 'CONCLUIDO' && o.status !== 'CANCELADO')
     .reduce((acc, curr) => acc + (curr.value - curr.deposit), 0);
 
   const handleOpenNewOs = () => {
-    setStatusFilter('ATIVAS');
+    setStatusFilter('SEPARACAO');
     setSearchTerm('');
     onOpenNewOsModal();
   };
@@ -89,15 +86,12 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
       (os.items && os.items.some((it) => it.name.toLowerCase().includes(query) || (it.sku && it.sku.toLowerCase().includes(query))));
 
     let matchesStatus = true;
-    if (statusFilter === 'ATIVAS') {
-      // Aberto: "Pendente" (NOVO) e "Em Produção" (EM_SEPARACAO)
-      matchesStatus = os.status === 'NOVO' || os.status === 'EM_SEPARACAO';
-    } else if (statusFilter === 'PRONTAS') {
-      // "Pronto" (SEPARADO)
-      matchesStatus = os.status === 'SEPARADO';
-    } else if (statusFilter === 'HISTORICO') {
-      // "Histórico/Entregues" (ENTREGUE, CONCLUIDO, CANCELADO)
-      matchesStatus = os.status === 'ENTREGUE' || os.status === 'CONCLUIDO' || os.status === 'CANCELADO';
+    if (statusFilter === 'SEPARACAO') {
+      matchesStatus = os.status === 'EM_SEPARACAO' || (os.status as string) === 'NOVO';
+    } else if (statusFilter === 'ENTREGUES') {
+      matchesStatus = os.status === 'ENTREGUE' || (os.status as string) === 'SEPARADO';
+    } else if (statusFilter === 'CONCLUIDAS') {
+      matchesStatus = os.status === 'CONCLUIDO' || os.status === 'CANCELADO';
     } else if (statusFilter === 'TODAS') {
       matchesStatus = true;
     }
@@ -105,40 +99,32 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
     return matchesSearch && matchesStatus;
   });
 
-  // 2. STATUS COM BADGES COLORIDOS:
-  // * Pendente (Amarelo)
-  // * Em Produção (Azul)
-  // * Pronto (Verde)
-  // * Entregue (Cinza)
+  // STATUS COM BADGES COLORIDOS:
+  // * Em Separação (Azul)
+  // * Entregue (Âmbar/Laranja)
+  // * Concluído (Verde)
+  // * Cancelado (Vermelho)
   const renderStatusBadge = (status: OsStatus) => {
     switch (status) {
-      case 'NOVO':
-        return (
-          <span className="status-badge-pendente inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider font-mono shadow-sm">
-            <Clock className="w-3 h-3 text-amber-400 shrink-0" />
-            <span>Pendente</span>
-          </span>
-        );
       case 'EM_SEPARACAO':
         return (
           <span className="status-badge-producao inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider font-mono shadow-sm animate-pulse">
             <Wrench className="w-3 h-3 text-blue-400 shrink-0 animate-spin" />
-            <span>Em Produção</span>
-          </span>
-        );
-      case 'SEPARADO':
-        return (
-          <span className="status-badge-pronto inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider font-mono shadow-sm">
-            <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
-            <span>Pronto</span>
+            <span>Em Separação</span>
           </span>
         );
       case 'ENTREGUE':
+        return (
+          <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider font-mono shadow-sm bg-amber-500/20 text-amber-300 border border-amber-500/40">
+            <PackageCheck className="w-3 h-3 text-amber-400 shrink-0" />
+            <span>Entregue</span>
+          </span>
+        );
       case 'CONCLUIDO':
         return (
-          <span className="status-badge-entregue inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider font-mono shadow-sm">
-            <PackageCheck className="w-3 h-3 text-zinc-400 shrink-0" />
-            <span>{status === 'CONCLUIDO' ? 'Concluído' : 'Entregue'}</span>
+          <span className="status-badge-pronto inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider font-mono shadow-sm">
+            <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
+            <span>Concluído</span>
           </span>
         );
       case 'CANCELADO':
@@ -150,8 +136,9 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
         );
       default:
         return (
-          <span className="status-badge-pendente inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider font-mono">
-            <span>{status}</span>
+          <span className="status-badge-producao inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider font-mono shadow-sm">
+            <Wrench className="w-3 h-3 text-blue-400 shrink-0" />
+            <span>Em Separação</span>
           </span>
         );
     }
@@ -160,34 +147,12 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
   // Botão de Avanço Rápido de Status do Fluxo Tático
   const renderNextStatusAction = (os: ServiceOrder) => {
     switch (os.status) {
-      case 'NOVO':
-        return (
-          <button
-            onClick={() => onUpdateOsStatus(os.id, 'EM_SEPARACAO')}
-            title="Avançar status: Iniciar Produção"
-            className="px-2.5 py-1 bg-blue-500/20 hover:bg-blue-500 text-blue-400 hover:text-black border border-blue-500/40 rounded-lg text-[10px] font-bold uppercase tracking-wider transition cursor-pointer flex items-center space-x-1"
-          >
-            <span>Produzir</span>
-            <ArrowRight className="w-3 h-3" />
-          </button>
-        );
       case 'EM_SEPARACAO':
-        return (
-          <button
-            onClick={() => onUpdateOsStatus(os.id, 'SEPARADO')}
-            title="Avançar status: Marcar como Pronto"
-            className="px-2.5 py-1 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-black border border-emerald-500/40 rounded-lg text-[10px] font-bold uppercase tracking-wider transition cursor-pointer flex items-center space-x-1"
-          >
-            <span>Pronto</span>
-            <ArrowRight className="w-3 h-3" />
-          </button>
-        );
-      case 'SEPARADO':
         return (
           <button
             onClick={() => onUpdateOsStatus(os.id, 'ENTREGUE')}
             title="Avançar status: Marcar como Entregue"
-            className="px-2.5 py-1 bg-zinc-700/40 hover:bg-zinc-600 text-zinc-300 hover:text-white border border-zinc-600/50 rounded-lg text-[10px] font-bold uppercase tracking-wider transition cursor-pointer flex items-center space-x-1"
+            className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-black border border-amber-500/40 rounded-lg text-[10px] font-bold uppercase tracking-wider transition cursor-pointer flex items-center space-x-1"
           >
             <span>Entregar</span>
             <ArrowRight className="w-3 h-3" />
@@ -197,15 +162,27 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
         return (
           <button
             onClick={() => onUpdateOsStatus(os.id, 'CONCLUIDO')}
-            title="Avançar status: Finalizar e Arquivar OS"
-            className="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-emerald-400 border border-zinc-700 rounded-lg text-[10px] font-bold uppercase tracking-wider transition cursor-pointer flex items-center space-x-1"
+            title="Avançar status: Concluir e Baixar Estoque"
+            className="px-2.5 py-1 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-black border border-emerald-500/40 rounded-lg text-[10px] font-bold uppercase tracking-wider transition cursor-pointer flex items-center space-x-1"
           >
             <span>Concluir</span>
             <CheckCircle2 className="w-3 h-3" />
           </button>
         );
-      default:
+      case 'CONCLUIDO':
+      case 'CANCELADO':
         return null;
+      default:
+        return (
+          <button
+            onClick={() => onUpdateOsStatus(os.id, 'ENTREGUE')}
+            title="Avançar status: Marcar como Entregue"
+            className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-black border border-amber-500/40 rounded-lg text-[10px] font-bold uppercase tracking-wider transition cursor-pointer flex items-center space-x-1"
+          >
+            <span>Entregar</span>
+            <ArrowRight className="w-3 h-3" />
+          </button>
+        );
     }
   };
 
@@ -240,17 +217,17 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
             <span>OS Ativas em Aberto</span>
             <Wrench className="w-4 h-4 text-amber-500" />
           </div>
-          <p className="text-2xl font-bold text-white mt-2 font-tactical">{ativasCount}</p>
-          <p className="text-[10px] text-zinc-500 mt-1">{novoCount} Pendentes • {producaoCount} Em Produção</p>
+          <p className="text-2xl font-bold text-blue-400 mt-2 font-tactical">{separacaoCount}</p>
+          <p className="text-[10px] text-zinc-500 mt-1">Ordens ativas na oficina</p>
         </div>
 
         <div className="bg-zinc-900/60 p-4 rounded-xl border border-zinc-800">
           <div className="flex items-center justify-between text-zinc-400 text-xs font-semibold uppercase">
-            <span>Prontas para Retirada</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span>OS Entregues</span>
+            <PackageCheck className="w-4 h-4 text-amber-400" />
           </div>
-          <p className="text-2xl font-bold text-emerald-400 mt-2 font-tactical">{prontasCount}</p>
-          <p className="text-[10px] text-zinc-500 mt-1">Aguardando militar no balcão</p>
+          <p className="text-2xl font-bold text-amber-400 mt-2 font-tactical">{entreguesCount}</p>
+          <p className="text-[10px] text-zinc-500 mt-1">Entregues ao militar</p>
         </div>
 
         <div className="bg-zinc-900/60 p-4 rounded-xl border border-zinc-800">
@@ -264,11 +241,11 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
 
         <div className="bg-zinc-900/60 p-4 rounded-xl border border-zinc-800">
           <div className="flex items-center justify-between text-zinc-400 text-xs font-semibold uppercase">
-            <span>Total no Histórico</span>
+            <span>Total de Ordens</span>
             <FileText className="w-4 h-4 text-zinc-400" />
           </div>
           <p className="text-2xl font-bold text-zinc-300 mt-2 font-tactical">{todasCount}</p>
-          <p className="text-[10px] text-zinc-500 mt-1">{historicoCount} entregues / arquivadas</p>
+          <p className="text-[10px] text-zinc-500 mt-1">{concluidasCount} concluídas / finalizadas</p>
         </div>
       </div>
 
@@ -293,63 +270,63 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
             <span>Filtro:</span>
           </span>
 
-          {/* Botão ATIVAS (Padrão: Pendente e Em Produção) */}
+          {/* Botão SEPARAÇÃO (Padrão: Em Separação) */}
           <button
-            onClick={() => setStatusFilter('ATIVAS')}
+            onClick={() => setStatusFilter('SEPARACAO')}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase transition flex items-center space-x-1.5 cursor-pointer shrink-0 ${
-              statusFilter === 'ATIVAS'
+              statusFilter === 'SEPARACAO'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                : 'bg-zinc-950 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700'
+            }`}
+          >
+            <Wrench className="w-3.5 h-3.5" />
+            <span>Em Separação</span>
+            <span
+              className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+                statusFilter === 'SEPARACAO' ? 'bg-blue-800 text-white' : 'bg-zinc-800 text-zinc-300'
+              }`}
+            >
+              {separacaoCount}
+            </span>
+          </button>
+
+          {/* Botão ENTREGUES */}
+          <button
+            onClick={() => setStatusFilter('ENTREGUES')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase transition flex items-center space-x-1.5 cursor-pointer shrink-0 ${
+              statusFilter === 'ENTREGUES'
                 ? 'bg-amber-500 text-black shadow-md shadow-amber-500/20'
                 : 'bg-zinc-950 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700'
             }`}
           >
-            <Clock className="w-3.5 h-3.5" />
-            <span>Ativas</span>
+            <PackageCheck className="w-3.5 h-3.5" />
+            <span>Entregues</span>
             <span
               className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                statusFilter === 'ATIVAS' ? 'bg-black/20 text-black' : 'bg-zinc-800 text-zinc-300'
+                statusFilter === 'ENTREGUES' ? 'bg-black/20 text-black' : 'bg-zinc-800 text-zinc-300'
               }`}
             >
-              {ativasCount}
+              {entreguesCount}
             </span>
           </button>
 
-          {/* Botão PRONTAS */}
+          {/* Botão CONCLUÍDAS */}
           <button
-            onClick={() => setStatusFilter('PRONTAS')}
+            onClick={() => setStatusFilter('CONCLUIDAS')}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase transition flex items-center space-x-1.5 cursor-pointer shrink-0 ${
-              statusFilter === 'PRONTAS'
-                ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/20'
+              statusFilter === 'CONCLUIDAS'
+                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
                 : 'bg-zinc-950 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700'
             }`}
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Prontas</span>
+            <span>Concluídas</span>
             <span
               className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                statusFilter === 'PRONTAS' ? 'bg-black/20 text-black' : 'bg-zinc-800 text-zinc-300'
+                statusFilter === 'CONCLUIDAS' ? 'bg-emerald-800 text-white' : 'bg-zinc-800 text-zinc-300'
               }`}
             >
-              {prontasCount}
-            </span>
-          </button>
-
-          {/* Botão HISTÓRICO / ENTREGUES */}
-          <button
-            onClick={() => setStatusFilter('HISTORICO')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase transition flex items-center space-x-1.5 cursor-pointer shrink-0 ${
-              statusFilter === 'HISTORICO'
-                ? 'bg-zinc-700 text-white shadow-md'
-                : 'bg-zinc-950 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700'
-            }`}
-          >
-            <PackageCheck className="w-3.5 h-3.5" />
-            <span>Histórico / Entregues</span>
-            <span
-              className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                statusFilter === 'HISTORICO' ? 'bg-zinc-800 text-white' : 'bg-zinc-800 text-zinc-300'
-              }`}
-            >
-              {historicoCount}
+              {concluidasCount}
             </span>
           </button>
 
@@ -358,14 +335,14 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
             onClick={() => setStatusFilter('TODAS')}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold uppercase transition flex items-center space-x-1.5 cursor-pointer shrink-0 ${
               statusFilter === 'TODAS'
-                ? 'bg-blue-600 text-white shadow-md'
+                ? 'bg-zinc-700 text-white shadow-md'
                 : 'bg-zinc-950 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700'
             }`}
           >
             <span>Todas</span>
             <span
               className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                statusFilter === 'TODAS' ? 'bg-blue-800 text-white' : 'bg-zinc-800 text-zinc-300'
+                statusFilter === 'TODAS' ? 'bg-zinc-800 text-white' : 'bg-zinc-800 text-zinc-300'
               }`}
             >
               {todasCount}
@@ -380,8 +357,8 @@ export const WorkOrdersTab: React.FC<WorkOrdersTabProps> = ({
           <Wrench className="w-12 h-12 mx-auto text-zinc-600 mb-3" />
           <p className="text-sm font-semibold text-zinc-400">Nenhuma Ordem de Serviço encontrada</p>
           <p className="text-xs text-zinc-500 mt-1">
-            {statusFilter === 'ATIVAS'
-              ? 'Não há ordens de serviço pendentes ou em produção no momento.'
+            {statusFilter === 'SEPARACAO'
+              ? 'Não há ordens de serviço em separação no momento.'
               : 'Nenhum registro para o filtro selecionado.'}
           </p>
           <button

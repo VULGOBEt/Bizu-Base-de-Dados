@@ -51,13 +51,6 @@ export const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
 
   const getStatusBadge = (status: OsStatus) => {
     switch (status) {
-      case 'NOVO':
-        return (
-          <span className="inline-flex items-center space-x-1 bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">
-            <Clock className="w-3 h-3" />
-            <span>Novo</span>
-          </span>
-        );
       case 'EM_SEPARACAO':
         return (
           <span className="inline-flex items-center space-x-1 bg-blue-500/10 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">
@@ -65,16 +58,9 @@ export const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
             <span>Em Separação</span>
           </span>
         );
-      case 'SEPARADO':
-        return (
-          <span className="inline-flex items-center space-x-1 bg-purple-500/10 text-purple-400 border border-purple-500/30 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">
-            <PackageCheck className="w-3 h-3" />
-            <span>Separado</span>
-          </span>
-        );
       case 'ENTREGUE':
         return (
-          <span className="inline-flex items-center space-x-1 bg-orange-500/10 text-orange-400 border border-orange-500/30 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">
+          <span className="inline-flex items-center space-x-1 bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">
             <CheckCircle2 className="w-3 h-3" />
             <span>Entregue</span>
           </span>
@@ -94,7 +80,12 @@ export const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
           </span>
         );
       default:
-        return null;
+        return (
+          <span className="inline-flex items-center space-x-1 bg-blue-500/10 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">
+            <Wrench className="w-3 h-3" />
+            <span>Em Separação</span>
+          </span>
+        );
     }
   };
 

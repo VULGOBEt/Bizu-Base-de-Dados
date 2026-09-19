@@ -44,10 +44,8 @@ export const ServiceOrderDetailModal: React.FC<ServiceOrderDetailModalProps> = (
   if (!isOpen || !order) return null;
 
   const statuses: { key: OsStatus; label: string; icon: React.ReactNode }[] = [
-    { key: 'NOVO', label: 'NOVO', icon: <Clock className="w-3.5 h-3.5" /> },
-    { key: 'EM_SEPARACAO', label: 'EM SEPARAÇÃO', icon: <Package className="w-3.5 h-3.5" /> },
-    { key: 'SEPARADO', label: 'SEPARADO', icon: <PackageCheck className="w-3.5 h-3.5" /> },
-    { key: 'ENTREGUE', label: 'ENTREGUE', icon: <Wrench className="w-3.5 h-3.5" /> },
+    { key: 'EM_SEPARACAO', label: 'EM SEPARAÇÃO', icon: <Wrench className="w-3.5 h-3.5" /> },
+    { key: 'ENTREGUE', label: 'ENTREGUE', icon: <PackageCheck className="w-3.5 h-3.5" /> },
     { key: 'CONCLUIDO', label: 'CONCLUÍDO', icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
   ];
 
@@ -57,18 +55,16 @@ export const ServiceOrderDetailModal: React.FC<ServiceOrderDetailModalProps> = (
 
   const getStatusBadge = (status: OsStatus) => {
     switch (status) {
-      case 'NOVO':
-        return <span className="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1 rounded-full text-xs font-bold uppercase">🟡 Novo</span>;
       case 'EM_SEPARACAO':
         return <span className="bg-blue-500/20 text-blue-400 border border-blue-500/40 px-2.5 py-1 rounded-full text-xs font-bold uppercase animate-pulse">🔵 Em Separação</span>;
-      case 'SEPARADO':
-        return <span className="bg-purple-500/20 text-purple-400 border border-purple-500/40 px-2.5 py-1 rounded-full text-xs font-bold uppercase">🟣 Separado</span>;
       case 'ENTREGUE':
-        return <span className="bg-orange-500/20 text-orange-400 border border-orange-500/40 px-2.5 py-1 rounded-full text-xs font-bold uppercase">🟠 Entregue</span>;
+        return <span className="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1 rounded-full text-xs font-bold uppercase">🟠 Entregue</span>;
       case 'CONCLUIDO':
         return <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2.5 py-1 rounded-full text-xs font-bold uppercase">🟢 Concluído</span>;
       case 'CANCELADO':
         return <span className="bg-rose-500/20 text-rose-400 border border-rose-500/40 px-2.5 py-1 rounded-full text-xs font-bold uppercase">🔴 Cancelado</span>;
+      default:
+        return <span className="bg-blue-500/20 text-blue-400 border border-blue-500/40 px-2.5 py-1 rounded-full text-xs font-bold uppercase">🔵 Em Separação</span>;
     }
   };
 
@@ -104,7 +100,7 @@ export const ServiceOrderDetailModal: React.FC<ServiceOrderDetailModalProps> = (
             <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block font-tactical">
               Linha do Tempo de Progresso da OS
             </span>
-            <div className="grid grid-cols-5 gap-1 pt-1">
+            <div className="grid grid-cols-3 gap-2 pt-1">
               {statuses.map((s, idx) => {
                 const isPassed = idx <= currentStatusIndex;
                 const isCurrent = idx === currentStatusIndex;

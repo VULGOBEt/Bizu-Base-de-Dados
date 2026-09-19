@@ -62,8 +62,8 @@ export const INITIAL_SERVICE_ORDERS: ServiceOrder[] = [
     notes: 'Prioridade para entrega antes do serviço de escala.',
     createdBy: 'Atendimento',
     historyLogs: [
-      { id: 'log-1', date: new Date(Date.now() - 86400000 * 2).toISOString(), user: 'Atendimento', action: 'OS Criada', statusTo: 'NOVO' },
-      { id: 'log-2', date: new Date(Date.now() - 86400000).toISOString(), user: 'Atendimento', action: 'Iniciou separação', statusFrom: 'NOVO', statusTo: 'EM_SEPARACAO' }
+      { id: 'log-1', date: new Date(Date.now() - 86400000 * 2).toISOString(), user: 'Atendimento', action: 'OS Criada', statusTo: 'EM_SEPARACAO' },
+      { id: 'log-2', date: new Date(Date.now() - 86400000).toISOString(), user: 'Atendimento', action: 'Iniciou separação', statusTo: 'EM_SEPARACAO' }
     ]
   },
   {
@@ -86,12 +86,12 @@ export const INITIAL_SERVICE_ORDERS: ServiceOrder[] = [
     deposit: 85.00,
     paymentMethod: 'Cartão de Crédito',
     priority: 'NORMAL',
-    status: 'SEPARADO',
-    notes: 'Pronto na arara de retiradas.',
+    status: 'ENTREGUE',
+    notes: 'Entregue ao militar.',
     createdBy: 'Atendimento',
     historyLogs: [
-      { id: 'log-3', date: new Date(Date.now() - 86400000 * 5).toISOString(), user: 'Atendimento', action: 'OS Criada', statusTo: 'NOVO' },
-      { id: 'log-4', date: new Date(Date.now() - 86400000 * 2).toISOString(), user: 'Atendimento', action: 'Material Separado', statusFrom: 'EM_SEPARACAO', statusTo: 'SEPARADO' }
+      { id: 'log-3', date: new Date(Date.now() - 86400000 * 5).toISOString(), user: 'Atendimento', action: 'OS Criada', statusTo: 'EM_SEPARACAO' },
+      { id: 'log-4', date: new Date(Date.now() - 86400000 * 2).toISOString(), user: 'Atendimento', action: 'Material Entregue', statusFrom: 'EM_SEPARACAO', statusTo: 'ENTREGUE' }
     ]
   }
 ];

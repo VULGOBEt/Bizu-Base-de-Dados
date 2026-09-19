@@ -93,7 +93,7 @@ export interface OsItem {
   unitPrice: number;
 }
 
-export type OsStatus = 'NOVO' | 'EM_SEPARACAO' | 'SEPARADO' | 'ENTREGUE' | 'CONCLUIDO' | 'CANCELADO';
+export type OsStatus = 'EM_SEPARACAO' | 'ENTREGUE' | 'CONCLUIDO' | 'CANCELADO';
 export type OsPriority = 'NORMAL' | 'ALTA' | 'URGENTE';
 
 export interface OsHistoryLog {

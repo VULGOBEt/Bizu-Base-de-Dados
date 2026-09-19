@@ -78,7 +78,7 @@ export const StockEntryModal: React.FC<StockEntryModalProps> = ({
               <option value="">-- Selecionar Equipamento --</option>
               {products.map((p) => (
                 <option key={p.id} value={p.id}>
-                  {p.name} (SKU: {p.sku} | Estoque Atual: {p.stock} un)
+                  {p.name}
                 </option>
               ))}
             </select>

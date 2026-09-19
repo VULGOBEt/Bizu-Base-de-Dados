@@ -39,7 +39,7 @@ Agradecemos a preferência e o compromisso! Equipamento conferido e aprovado. �
 
 export function generateOsWhatsAppText(os: ServiceOrder): string {
   const pendingValue = os.value - (os.deposit || 0);
-  const isReady = os.status === 'SEPARADO' || os.status === 'ENTREGUE' || os.status === 'CONCLUIDO';
+  const isReady = os.status === 'ENTREGUE' || os.status === 'CONCLUIDO';
 
   return `*BIZÚ TÁTICO - OFICINA & CUSTOMIZAÇÃO* 🛠️
 *Ordem de Serviço ${os.id}*
@@ -49,13 +49,13 @@ export function generateOsWhatsAppText(os: ServiceOrder): string {
 *Força/Unidade:* ${os.force || 'Polícia Militar'}
 *Serviço:* ${os.serviceType}
 *Item/Equipamento:* ${os.itemDescription || '-'}
-*Status:* ${isReady ? '✅ PRONTO PARA RETIRADA / CONCLUÍDO!' : os.status === 'EM_SEPARACAO' ? '⚙️ Em Produção' : '⏳ Registrado'}
+*Status:* ${os.status === 'CONCLUIDO' ? '✅ Concluído' : os.status === 'ENTREGUE' ? '📦 Entregue' : os.status === 'EM_SEPARACAO' ? '⚙️ Em Separação' : '❌ Cancelado'}
 
 💵 *Valor Total:* ${formatBRL(os.value)}
 💳 *Sinal Pago:* ${formatBRL(os.deposit || 0)}
 ⚠️ *Saldo Restante:* *${formatBRL(pendingValue)}*
 
-${isReady ? 'Seu equipamento já está pronto para retirada no nosso arsenal! 🪖' : 'Acompanhe seu pedido pelo nosso atendimento.'}`;
+${isReady ? 'Seu equipamento já foi entregue ou concluído no nosso arsenal! 🪖' : 'Seu equipamento está em processo de separação na oficina.'}`;
 }
 
 export function openWhatsApp(phone: string, text?: string) {

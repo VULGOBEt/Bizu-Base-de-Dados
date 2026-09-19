@@ -30,17 +30,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       show: true,
     },
     {
-      id: 'products',
-      label: 'Arsenal & Estoque',
-      icon: <Box className="w-4 h-4" />,
-      show: true,
-      badge: lowStockCount > 0 ? (
-        <span className="ml-auto bg-amber-500/20 text-amber-400 text-[10px] px-2 py-0.5 rounded-full font-bold border border-amber-500/40">
-          {lowStockCount}
-        </span>
-      ) : null,
-    },
-    {
       id: 'service-orders',
       label: 'Pedidos',
       icon: <Crosshair className="w-4 h-4 text-amber-400" />,
@@ -48,6 +37,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
       badge: activeOsCount > 0 ? (
         <span className="ml-auto bg-amber-500 text-black text-[10px] px-2 py-0.5 rounded-full font-bold shadow-sm">
           {activeOsCount}
+        </span>
+      ) : null,
+    },
+    {
+      id: 'products',
+      label: 'Arsenal',
+      icon: <Box className="w-4 h-4" />,
+      show: true,
+      badge: lowStockCount > 0 ? (
+        <span className="ml-auto bg-amber-500/20 text-amber-400 text-[10px] px-2 py-0.5 rounded-full font-bold border border-amber-500/40">
+          {lowStockCount}
         </span>
       ) : null,
     },

@@ -36,10 +36,11 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
   const [priority, setPriority] = useState<OsPriority>('NORMAL');
   const [value, setValue] = useState('');
   const [discount, setDiscount] = useState('');
+  const [discountPercent, setDiscountPercent] = useState('');
   const [installments, setInstallments] = useState<number>(1);
   const [deposit, setDeposit] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('Cartão');
-  const [status, setStatus] = useState<OsStatus>('NOVO');
+  const [status, setStatus] = useState<OsStatus>('EM_SEPARACAO');
   const [notes, setNotes] = useState('');
 
   // Items selection state inside OS creation
@@ -79,12 +80,23 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
       setSpecifications(editingOs.specifications || '');
       setPriority(editingOs.priority || 'NORMAL');
       setValue(editingOs.value.toString());
-      setDiscount(editingOs.discount ? editingOs.discount.toString() : '');
+      const existingDisc = editingOs.discount ? editingOs.discount.toString() : '';
+      setDiscount(existingDisc);
+      if (editingOs.discount && editingOs.value) {
+        const pct = (editingOs.discount / editingOs.value) * 100;
+        setDiscountPercent(pct % 1 === 0 ? pct.toFixed(0) : pct.toFixed(1));
+      } else {
+        setDiscountPercent('');
+      }
       setInstallments(editingOs.installments || 1);
       setDeposit(editingOs.deposit.toString());
       const normalizedPay = editingOs.paymentMethod?.includes('Cartão') ? 'Cartão' : (editingOs.paymentMethod || 'Cartão');
       setPaymentMethod(normalizedPay);
-      setStatus(editingOs.status || 'NOVO');
+      let initialStatus = editingOs.status;
+      if (initialStatus === 'NOVO' || initialStatus === 'SEPARADO') {
+        initialStatus = 'EM_SEPARACAO';
+      }
+      setStatus(initialStatus || 'EM_SEPARACAO');
       setNotes(editingOs.notes || '');
       setOsItems(editingOs.items || []);
     } else {
@@ -101,10 +113,11 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
       setPriority('NORMAL');
       setValue('');
       setDiscount('');
+      setDiscountPercent('');
       setInstallments(1);
       setDeposit('');
       setPaymentMethod('Cartão');
-      setStatus('NOVO');
+      setStatus('EM_SEPARACAO');
       setNotes('');
       setOsItems([]);
     }
@@ -184,6 +197,10 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
       0
     );
     setValue(itemsTotal.toFixed(2));
+    const pct = parseFloat(discountPercent);
+    if (!isNaN(pct) && pct > 0 && itemsTotal > 0) {
+      setDiscount(((itemsTotal * pct) / 100).toFixed(2));
+    }
 
     setSelectedProdId('');
     setSelectedProdQty(1);
@@ -198,6 +215,35 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
       0
     );
     setValue(itemsTotal > 0 ? itemsTotal.toFixed(2) : '');
+    const pct = parseFloat(discountPercent);
+    if (!isNaN(pct) && pct > 0 && itemsTotal > 0) {
+      setDiscount(((itemsTotal * pct) / 100).toFixed(2));
+    } else if (itemsTotal === 0) {
+      setDiscount('');
+    }
+  };
+
+  // Cálculo de desconto por %
+  const handleDiscountPercentChange = (pctStr: string) => {
+    setDiscountPercent(pctStr);
+    const gross = parseFloat(value) || 0;
+    const pct = parseFloat(pctStr);
+    if (!isNaN(pct) && pct >= 0 && gross > 0) {
+      const calcDiscount = (gross * pct) / 100;
+      setDiscount(calcDiscount.toFixed(2));
+    } else if (pctStr === '' || pct === 0) {
+      setDiscount('');
+    }
+  };
+
+  const handleValueChange = (valStr: string) => {
+    setValue(valStr);
+    const gross = parseFloat(valStr) || 0;
+    const pct = parseFloat(discountPercent);
+    if (!isNaN(pct) && pct > 0 && gross > 0) {
+      const calcDiscount = (gross * pct) / 100;
+      setDiscount(calcDiscount.toFixed(2));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -419,10 +465,10 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
                   onChange={(e) => setSelectedProdId(e.target.value)}
                   className="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-xs text-zinc-200 focus:border-amber-500"
                 >
-                  <option value="">-- Selecionar Equipamento do Resultado --</option>
+                  <option value="">-- Selecionar Equipamento --</option>
                   {filteredCatalog.map((p) => (
                     <option key={p.id} value={p.id} disabled={p.stock <= 0}>
-                      {p.name} (SKU: {p.sku} | Estoque: {p.stock} un | {formatBRL(p.salePrice)})
+                      {p.name}
                     </option>
                   ))}
                 </select>
@@ -553,7 +599,7 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
                 Financeiro & Pagamento
               </h4>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[10px] font-semibold text-zinc-300 uppercase mb-1">Valor Bruto (R$) *</label>
                   <input
@@ -562,21 +608,58 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
                     required
                     placeholder="0.00"
                     value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-sm text-zinc-100 font-bold font-mono focus:border-amber-500"
+                    onChange={(e) => handleValueChange(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-sm text-zinc-100 font-bold font-mono focus:border-amber-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-semibold text-rose-400 uppercase mb-1">Desconto (R$)</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    placeholder="0.00"
-                    value={discount}
-                    onChange={(e) => setDiscount(e.target.value)}
-                    className="w-full bg-zinc-900 border border-rose-500/40 rounded-xl p-2 text-sm text-rose-400 font-bold font-mono focus:border-rose-400"
-                  />
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-[10px] font-semibold text-amber-400 uppercase">Desconto (%)</label>
+                    {parseFloat(discount) > 0 && (
+                      <span className="text-[10px] text-rose-400 font-mono font-bold">
+                        - {formatBRL(parseFloat(discount))}
+                      </span>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      step="0.5"
+                      min="0"
+                      max="100"
+                      placeholder="0"
+                      value={discountPercent}
+                      onChange={(e) => handleDiscountPercentChange(e.target.value)}
+                      className="w-full bg-zinc-900 border border-amber-500/40 rounded-xl p-2.5 pr-7 text-sm text-amber-400 font-bold font-mono focus:border-amber-400"
+                    />
+                    <span className="absolute right-2.5 top-2.5 text-zinc-400 font-mono text-xs font-bold">%</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 mt-1.5">
+                    {[5, 10, 15, 20].map((pct) => (
+                      <button
+                        key={pct}
+                        type="button"
+                        onClick={() => handleDiscountPercentChange(pct.toString())}
+                        className={`text-[9px] font-mono px-2 py-0.5 rounded transition cursor-pointer ${
+                          discountPercent === pct.toString()
+                            ? 'bg-amber-500 text-black font-bold'
+                            : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300'
+                        }`}
+                      >
+                        {pct}%
+                      </button>
+                    ))}
+                    {discountPercent && (
+                      <button
+                        type="button"
+                        onClick={() => handleDiscountPercentChange('')}
+                        className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 transition cursor-pointer ml-auto"
+                      >
+                        Limpar
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -584,9 +667,16 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
               <div className="grid grid-cols-2 gap-2 bg-zinc-900/60 p-2.5 rounded-xl border border-zinc-800">
                 <div>
                   <span className="text-[10px] text-zinc-400 uppercase block font-semibold">Total c/ Desconto:</span>
-                  <span className="text-sm font-bold font-mono text-emerald-400">
-                    R$ {Math.max(0, (parseFloat(value) || 0) - (parseFloat(discount) || 0)).toFixed(2)}
-                  </span>
+                  <div className="flex items-baseline space-x-1.5 mt-0.5">
+                    <span className="text-sm font-bold font-mono text-emerald-400">
+                      R$ {Math.max(0, (parseFloat(value) || 0) - (parseFloat(discount) || 0)).toFixed(2)}
+                    </span>
+                    {parseFloat(discount) > 0 && (
+                      <span className="text-[10px] font-mono text-zinc-500">
+                        ({discountPercent}% OFF)
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <label className="block text-[10px] font-semibold text-amber-400 uppercase mb-0.5">Sinal Pago (R$)</label>
@@ -608,9 +698,7 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
                   onChange={(e) => setStatus(e.target.value as OsStatus)}
                   className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-xs text-white font-bold cursor-pointer"
                 >
-                  <option value="NOVO">🟡 NOVO</option>
                   <option value="EM_SEPARACAO">🔵 EM SEPARAÇÃO</option>
-                  <option value="SEPARADO">🟣 SEPARADO</option>
                   <option value="ENTREGUE">🟠 ENTREGUE</option>
                   <option value="CONCLUIDO">🟢 CONCLUÍDO (Dar Baixa no Estoque)</option>
                   <option value="CANCELADO">🔴 CANCELADO</option>

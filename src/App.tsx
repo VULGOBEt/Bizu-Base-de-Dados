@@ -249,7 +249,7 @@ export default function App() {
         id: newOsId,
         number: newOsId,
         date: data.date || new Date().toISOString(),
-        status: data.status || 'NOVO',
+        status: data.status || 'EM_SEPARACAO',
       };
       setServiceOrders((prev) => [newOs, ...prev]);
       addActivity('ADD', `Nova ${newOsId} criada para ${data.soldado || data.warName || 'Soldado'}`);
@@ -596,7 +596,7 @@ export default function App() {
 
   const lowStockCount = products.filter((p) => Number(p.stock) <= Number(p.minStock)).length;
   const activeOsCount = serviceOrders.filter(
-    (os) => os.status === 'NOVO' || os.status === 'EM_SEPARACAO' || os.status === 'SEPARADO'
+    (os) => os.status === 'EM_SEPARACAO'
   ).length;
 
   return (
