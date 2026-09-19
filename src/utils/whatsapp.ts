@@ -24,7 +24,6 @@ export function generateOrderWhatsAppText(order: Order): string {
 *Comprovante do Pedido #${order.id}*
 
 *Soldado:* ${order.soldado || 'N/I'}
-*RE/Matrícula:* ${order.re || 'N/I'} | *CPF:* ${order.cpf || 'N/I'}
 *Tipo Sanguíneo:* ${order.bloodType || 'N/I'}
 *Força:* ${order.force || 'Polícia Militar'} ${order.battalion ? `• ${order.battalion}` : ''}
 *Data/Hora:* ${formatDate(order.date)}
@@ -43,15 +42,14 @@ export function generateOsWhatsAppText(os: ServiceOrder): string {
   const isReady = os.status === 'SEPARADO' || os.status === 'ENTREGUE' || os.status === 'CONCLUIDO';
 
   return `*BIZÚ TÁTICO - OFICINA & CUSTOMIZAÇÃO* 🛠️
-*Ordem de Serviço #${os.id}*
+*Ordem de Serviço ${os.id}*
 
 *Soldado:* ${os.soldado || os.warName || 'N/I'}
-*RE/Matrícula:* ${os.re || os.militaryId || 'N/I'} | *CPF:* ${os.cpf || 'N/I'}
 *Tipo Sanguíneo:* ${os.bloodType || 'N/I'}
 *Força/Unidade:* ${os.force || 'Polícia Militar'}
 *Serviço:* ${os.serviceType}
 *Item/Equipamento:* ${os.itemDescription || '-'}
-*Status:* ${isReady ? '✅ PRONTO PARA RETIRADA / CONCLUÍDO!' : os.status === 'EM_SEPARACAO' ? '⚙️ Em Separação' : '⏳ Registrado'}
+*Status:* ${isReady ? '✅ PRONTO PARA RETIRADA / CONCLUÍDO!' : os.status === 'EM_SEPARACAO' ? '⚙️ Em Produção' : '⏳ Registrado'}
 
 💵 *Valor Total:* ${formatBRL(os.value)}
 💳 *Sinal Pago:* ${formatBRL(os.deposit || 0)}
@@ -62,6 +60,25 @@ ${isReady ? 'Seu equipamento já está pronto para retirada no nosso arsenal! �
 
 export function openWhatsApp(phone: string, text?: string) {
   const cleanNum = sanitizePhone(phone);
+  // Abre a conversa direta com o cliente sem nenhum texto previsto
   const url = cleanNum ? `https://wa.me/${cleanNum}` : `https://wa.me/`;
   window.open(url, '_blank');
+}
+
+/**
+ * Retorna o link direto do WhatsApp do cliente:
+ * Apenas abre a conversa direta sem nenhum texto previsto
+ */
+export function buildOsWhatsAppUrl(os: ServiceOrder): string {
+  let cleanPhone = (os.phone || '').replace(/\D/g, '');
+  if (cleanPhone.length > 0) {
+    if (cleanPhone.startsWith('55') && cleanPhone.length > 11) {
+      // Já possui o DDI 55
+    } else {
+      cleanPhone = '55' + cleanPhone;
+    }
+  }
+
+  // Abre diretamente a conversa com o número do cliente, sem texto pré-definido
+  return cleanPhone ? `https://wa.me/${cleanPhone}` : `https://wa.me/`;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Box, Crosshair, FileText, UserCheck, BarChart2, PlusCircle, Download, Wrench, Settings } from 'lucide-react';
+import { Shield, Box, Crosshair, FileText, UserCheck, PlusCircle, Download, Wrench, Settings } from 'lucide-react';
 import { TabType, UserPermission } from '../types';
 import bizuLogo from '../assets/images/bizu_tactical_shield_1786484872892.jpg';
 
@@ -56,12 +56,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'Histórico de Pedidos',
       icon: <FileText className="w-4 h-4" />,
       show: true,
-    },
-    {
-      id: 'reports',
-      label: 'Relatórios & Estatísticas',
-      icon: <BarChart2 className="w-4 h-4" />,
-      show: activeUser ? activeUser.canViewReports : true,
     },
     {
       id: 'settings',

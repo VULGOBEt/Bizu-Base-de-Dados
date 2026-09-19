@@ -106,14 +106,14 @@ export interface OsHistoryLog {
 }
 
 export interface ServiceOrder {
-  id: string; // e.g. OS-000001
+  id: string; // e.g. OS 01, OS 02, OS 50, OS 102
   number?: string;
   profileId?: string;
   date: string;
   deliveryDate?: string;
   soldado: string;
-  re: string;
-  cpf: string;
+  re?: string;
+  cpf?: string;
   bloodType: string;
   force: string;
   rank?: string;
@@ -127,6 +127,8 @@ export interface ServiceOrder {
   items?: OsItem[];
   value: number;
   deposit: number;
+  discount?: number;
+  installments?: number;
   paymentMethod?: string;
   priority: OsPriority;
   status: OsStatus;
@@ -179,7 +181,6 @@ export type TabType =
   | 'pos'
   | 'sales'
   | 'service-orders'
-  | 'reports'
   | 'movements'
   | 'settings';
 
@@ -209,6 +210,7 @@ export interface Order {
   items: OrderItem[];
   subtotal?: number;
   discount?: number;
+  installments?: number;
   total: number;
 }
 

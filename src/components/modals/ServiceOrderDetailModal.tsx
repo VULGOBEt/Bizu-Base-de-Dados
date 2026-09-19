@@ -162,8 +162,7 @@ export const ServiceOrderDetailModal: React.FC<ServiceOrderDetailModalProps> = (
                 {order.priority || 'NORMAL'}
               </span>
             </div>
-            <div className="text-xs font-bold text-white pt-1">{order.serviceType}</div>
-            <p className="text-xs text-zinc-400 italic">"{order.itemDescription || 'Sem descrição'}"</p>
+            <p className="text-xs text-zinc-300 font-semibold mt-1">{order.itemDescription || 'Material entregue para oficina'}</p>
             {order.specifications && (
               <p className="text-xs text-amber-300/80 font-mono bg-zinc-900 p-2 rounded border border-zinc-800 mt-1">
                 Obs: {order.specifications}

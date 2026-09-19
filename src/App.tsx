@@ -5,7 +5,6 @@ import { DashboardTab } from './components/DashboardTab';
 import { ProductsTab } from './components/ProductsTab';
 import { PosTab } from './components/PosTab';
 import { SalesHistoryTab } from './components/SalesHistoryTab';
-import { ReportsTab } from './components/ReportsTab';
 import { WorkOrdersTab } from './components/WorkOrdersTab';
 import { SettingsTab } from './components/SettingsTab';
 
@@ -17,6 +16,7 @@ import { ServiceOrderModal } from './components/modals/ServiceOrderModal';
 import { ServiceOrderReceiptModal } from './components/modals/ServiceOrderReceiptModal';
 import { UserModal } from './components/modals/UserModal';
 import { checkUserPermission } from './utils/permissions';
+import { generateNextOsNumber } from './utils/formatters';
 
 import { Product, Order, Activity, CartItem, TabType, ServiceOrder, StoreConfig, UserPermission } from './types';
 import {
@@ -231,25 +231,33 @@ export default function App() {
     setIsServiceOrderReceiptModalOpen(true);
   };
 
-  const handleSaveServiceOrder = (data: Omit<ServiceOrder, 'id' | 'date'> & { id?: string }) => {
-    if (data.id) {
+  const handleSaveServiceOrder = (data: Omit<ServiceOrder, 'id' | 'date'> & { id?: string; date?: string }) => {
+    // Verifica se é uma edição de OS já existente
+    const isEditing = Boolean(editingServiceOrder && editingServiceOrder.id);
+    const targetId = isEditing ? editingServiceOrder!.id : (data.id || generateNextOsNumber(serviceOrders));
+
+    if (isEditing) {
       setServiceOrders((prev) =>
-        prev.map((os) => (os.id === data.id ? ({ ...os, ...data } as ServiceOrder) : os))
+        prev.map((os) => (os.id === targetId ? ({ ...os, ...data, id: targetId, number: targetId } as ServiceOrder) : os))
       );
-      addActivity('ADD', `Ordem de Serviço #${data.id} alterada (${data.soldado || data.warName || 'Soldado'})`);
-      showToast(`OS #${data.id} atualizada com sucesso!`);
+      addActivity('ADD', `Ordem de Serviço ${targetId} alterada (${data.soldado || data.warName || 'Soldado'})`);
+      showToast(`${targetId} atualizada com sucesso!`);
     } else {
-      const osNumber = 'OS-' + Math.floor(1000 + Math.random() * 9000);
+      // Nova OS criada: gera número sequencial no formato OS 01, OS 02, OS 50, OS 102
+      const newOsId = data.id || generateNextOsNumber(serviceOrders);
       const newOs: ServiceOrder = {
         ...data,
-        id: osNumber,
-        date: new Date().toISOString(),
+        id: newOsId,
+        number: newOsId,
+        date: data.date || new Date().toISOString(),
+        status: data.status || 'NOVO',
       };
       setServiceOrders((prev) => [newOs, ...prev]);
-      addActivity('ADD', `Nova Ordem de Serviço #${osNumber} emitida para ${data.soldado || data.warName || 'Soldado'}`);
-      showToast(`Ordem de Serviço #${osNumber} emitida!`);
+      addActivity('ADD', `Nova ${newOsId} criada para ${data.soldado || data.warName || 'Soldado'}`);
+      showToast(`Ordem de Serviço ${newOsId} emitida com sucesso!`);
       setCurrentReceiptServiceOrder(newOs);
       setIsServiceOrderReceiptModalOpen(true);
+      setCurrentTab('service-orders');
     }
     setIsServiceOrderModalOpen(false);
   };
@@ -613,11 +621,8 @@ export default function App() {
           activeUser={activeUser}
           onSelectUser={handleSelectUser}
           onOpenQuickSell={() => setIsQuickSellOpen(true)}
-          onOpenNewOrder={() => {
-            setCurrentTab('pos');
-            setCart([]);
-            showToast('Novo pedido iniciado!');
-          }}
+          currentTheme={storeConfig.theme || 'tactical-dark'}
+          onSelectTheme={(theme) => handleSaveStoreConfig({ ...storeConfig, theme })}
         />
 
         <div className="p-6 flex-1 max-w-7xl w-full mx-auto space-y-6">
@@ -625,6 +630,7 @@ export default function App() {
             <DashboardTab
               products={products}
               sales={sales}
+              serviceOrders={serviceOrders}
               pendingOrdersCount={activeOsCount}
               activities={activities}
               onSwitchTab={setCurrentTab}
@@ -662,14 +668,6 @@ export default function App() {
                 setCurrentReceiptOrder(order);
                 setIsReceiptModalOpen(true);
               }}
-            />
-          )}
-
-          {currentTab === 'reports' && (
-            <ReportsTab
-              products={products}
-              sales={sales}
-              activeUser={activeUser}
             />
           )}
 

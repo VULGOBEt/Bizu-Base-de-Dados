@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Wrench, Calendar, Plus, Trash2, Search, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { ServiceOrder, Product, OsItem, OsPriority, OsStatus } from '../../types';
-import { MILITARY_FORCES, SERVICE_TYPES, BLOOD_TYPES } from '../../data/initialData';
+import { MILITARY_FORCES, BLOOD_TYPES } from '../../data/initialData';
 import { formatBRL } from '../../utils/formatters';
 
 interface ServiceOrderModalProps {
@@ -21,6 +21,7 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
   onClose,
   onSave,
 }) => {
+  const soldadoInputRef = useRef<HTMLInputElement>(null);
   const [osNumber, setOsNumber] = useState('');
   const [soldado, setSoldado] = useState('');
   const [bloodType, setBloodType] = useState('O+');
@@ -29,13 +30,15 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
   const [battalion, setBattalion] = useState('');
   const [osDate, setOsDate] = useState(() => new Date().toISOString().slice(0, 10));
 
-  const [serviceType, setServiceType] = useState(SERVICE_TYPES[0]);
+  const [serviceType, setServiceType] = useState('Serviço Tático');
   const [itemDescription, setItemDescription] = useState('');
   const [specifications, setSpecifications] = useState('');
   const [priority, setPriority] = useState<OsPriority>('NORMAL');
   const [value, setValue] = useState('');
+  const [discount, setDiscount] = useState('');
+  const [installments, setInstallments] = useState<number>(1);
   const [deposit, setDeposit] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('Pix Tático');
+  const [paymentMethod, setPaymentMethod] = useState('Cartão');
   const [status, setStatus] = useState<OsStatus>('NOVO');
   const [notes, setNotes] = useState('');
 
@@ -46,18 +49,20 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
   const [selectedProdQty, setSelectedProdQty] = useState(1);
   const [itemError, setItemError] = useState('');
 
-  // Generate next sequential OS number e.g. OS-000003
+  // Gera número sequencial de OS: OS 01, OS 02, OS 50, OS 102
   const generateNextOsNumber = () => {
     let maxNum = 0;
     (existingOrders || []).forEach((o) => {
-      const match = o.id.match(/OS-(\d+)/i);
+      if (!o || !o.id) return;
+      const match = o.id.match(/\d+/);
       if (match) {
-        const num = parseInt(match[1], 10);
-        if (num > maxNum) maxNum = num;
+        const num = parseInt(match[0], 10);
+        if (!isNaN(num) && num > maxNum) maxNum = num;
       }
     });
     const next = maxNum + 1;
-    return `OS-${next.toString().padStart(6, '0')}`;
+    const formatted = next < 10 ? `0${next}` : `${next}`;
+    return `OS ${formatted}`;
   };
 
   useEffect(() => {
@@ -69,13 +74,16 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
       setForce(editingOs.force || MILITARY_FORCES[0]);
       setPhone(editingOs.phone || '');
       setBattalion(editingOs.battalion || '');
-      setServiceType(editingOs.serviceType || SERVICE_TYPES[0]);
+      setServiceType(editingOs.serviceType || 'Serviço Tático');
       setItemDescription(editingOs.itemDescription || '');
       setSpecifications(editingOs.specifications || '');
       setPriority(editingOs.priority || 'NORMAL');
       setValue(editingOs.value.toString());
+      setDiscount(editingOs.discount ? editingOs.discount.toString() : '');
+      setInstallments(editingOs.installments || 1);
       setDeposit(editingOs.deposit.toString());
-      setPaymentMethod(editingOs.paymentMethod || 'Pix Tático');
+      const normalizedPay = editingOs.paymentMethod?.includes('Cartão') ? 'Cartão' : (editingOs.paymentMethod || 'Cartão');
+      setPaymentMethod(normalizedPay);
       setStatus(editingOs.status || 'NOVO');
       setNotes(editingOs.notes || '');
       setOsItems(editingOs.items || []);
@@ -87,13 +95,15 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
       setForce(MILITARY_FORCES[0]);
       setPhone('');
       setBattalion('');
-      setServiceType(SERVICE_TYPES[0]);
+      setServiceType('Serviço Tático');
       setItemDescription('');
       setSpecifications('');
       setPriority('NORMAL');
       setValue('');
+      setDiscount('');
+      setInstallments(1);
       setDeposit('');
-      setPaymentMethod('Pix Tático');
+      setPaymentMethod('Cartão');
       setStatus('NOVO');
       setNotes('');
       setOsItems([]);
@@ -102,6 +112,14 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
     setProdSearch('');
     setSelectedProdId('');
     setSelectedProdQty(1);
+
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        soldadoInputRef.current?.focus();
+        soldadoInputRef.current?.select();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
   }, [editingOs, isOpen]);
 
   if (!isOpen) return null;
@@ -132,6 +150,7 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
 
     // Check if already in items
     const existingIndex = osItems.findIndex((it) => it.productId === selectedProd.id);
+    let updatedItems: OsItem[] = [];
     if (existingIndex >= 0) {
       const currentQty = osItems[existingIndex].qty;
       const newTotal = currentQty + selectedProdQty;
@@ -139,11 +158,14 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
         setItemError(`Quantidade superior ao estoque disponível (${selectedProd.stock} un disponíveis).`);
         return;
       }
-      const updated = [...osItems];
-      updated[existingIndex].qty = newTotal;
-      setOsItems(updated);
+      updatedItems = [...osItems];
+      updatedItems[existingIndex] = {
+        ...updatedItems[existingIndex],
+        qty: newTotal,
+      };
+      setOsItems(updatedItems);
     } else {
-      setOsItems([
+      updatedItems = [
         ...osItems,
         {
           productId: selectedProd.id,
@@ -152,17 +174,16 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
           qty: selectedProdQty,
           unitPrice: selectedProd.salePrice,
         },
-      ]);
+      ];
+      setOsItems(updatedItems);
     }
 
     // Recalculate auto total value
-    const itemsTotal = [...osItems, { productId: selectedProd.id, qty: selectedProdQty, unitPrice: selectedProd.salePrice }].reduce(
+    const itemsTotal = updatedItems.reduce(
       (acc, it) => acc + (it.qty || 1) * (it.unitPrice || 0),
       0
     );
-    if (!value || parseFloat(value) === 0) {
-      setValue(itemsTotal.toFixed(2));
-    }
+    setValue(itemsTotal.toFixed(2));
 
     setSelectedProdId('');
     setSelectedProdQty(1);
@@ -170,7 +191,13 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
   };
 
   const handleRemoveOsItem = (productId: string) => {
-    setOsItems(osItems.filter((i) => i.productId !== productId));
+    const updated = osItems.filter((i) => i.productId !== productId);
+    setOsItems(updated);
+    const itemsTotal = updated.reduce(
+      (acc, it) => acc + (it.qty || 1) * (it.unitPrice || 0),
+      0
+    );
+    setValue(itemsTotal > 0 ? itemsTotal.toFixed(2) : '');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -180,8 +207,14 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
       return;
     }
 
-    const valNum = parseFloat(value) || 0;
+    const rawVal = parseFloat(value) || 0;
+    const discNum = parseFloat(discount) || 0;
+    const finalVal = Math.max(0, rawVal - discNum);
     const depNum = parseFloat(deposit) || 0;
+
+    const formattedPayment = paymentMethod === 'Cartão' && installments > 1
+      ? `Cartão (${installments}x de R$ ${(finalVal / installments).toFixed(2)})`
+      : paymentMethod;
 
     onSave({
       id: osNumber,
@@ -194,12 +227,14 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
       phone: phone.trim(),
       battalion: battalion.trim(),
       serviceType,
-      itemDescription: itemDescription.trim() || 'Serviço e Equipamentos Táticos',
+      itemDescription: itemDescription.trim() || (osItems.length > 0 ? osItems.map(i => `${i.qty}x ${i.name}`).join(', ') : 'Serviço e Equipamentos Táticos'),
       specifications: specifications.trim(),
       items: osItems,
-      value: valNum,
+      value: finalVal,
+      discount: discNum,
+      installments: paymentMethod === 'Cartão' ? installments : 1,
       deposit: depNum,
-      paymentMethod,
+      paymentMethod: formattedPayment,
       priority,
       status,
       notes: notes.trim(),
@@ -216,7 +251,7 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
             </div>
             <div>
               <h2 className="font-bold text-white text-lg font-tactical tracking-wider">
-                {editingOs ? `EDITAR ORDEM DE SERVIÇO #${osNumber}` : `NOVA OS - ${osNumber}`}
+                {editingOs ? `EDITAR ORDEM DE SERVIÇO - ${osNumber}` : `NOVA ORDEM DE SERVIÇO - ${osNumber}`}
               </h2>
               <p className="text-xs text-zinc-400">Emissão e controle de Ordens de Serviço Táticas</p>
             </div>
@@ -285,6 +320,8 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
               <div>
                 <label className="block text-[10px] font-semibold text-amber-400 uppercase mb-1">Soldado (Nome) *</label>
                 <input
+                  ref={soldadoInputRef}
+                  id="soldadoInput"
                   type="text"
                   required
                   placeholder="Ex: Sd Silva / João"
@@ -369,6 +406,7 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
                 </label>
                 <div className="relative">
                   <input
+                    id="prodSearchInput"
                     type="text"
                     value={prodSearch}
                     onChange={(e) => setProdSearch(e.target.value)}
@@ -487,21 +525,6 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
             <div className="space-y-3">
               <div>
                 <label className="block text-[10px] font-semibold text-zinc-400 uppercase mb-1">
-                  Tipo de Serviço Principal / Titular
-                </label>
-                <select
-                  value={serviceType}
-                  onChange={(e) => setServiceType(e.target.value)}
-                  className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-2.5 text-xs text-white focus:border-amber-500 font-bold"
-                >
-                  {SERVICE_TYPES.map((st) => (
-                    <option key={st} value={st}>{st}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-semibold text-zinc-400 uppercase mb-1">
                   Material Deixado pelo Cliente
                 </label>
                 <input
@@ -527,12 +550,12 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
 
             <div className="space-y-3 bg-zinc-950 p-4 rounded-xl border border-zinc-800">
               <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider font-tactical">
-                Financeiro & Status da OS
+                Financeiro & Pagamento
               </h4>
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[10px] font-semibold text-amber-400 uppercase mb-1">Valor Total (R$) *</label>
+                  <label className="block text-[10px] font-semibold text-zinc-300 uppercase mb-1">Valor Bruto (R$) *</label>
                   <input
                     type="number"
                     step="0.01"
@@ -540,19 +563,40 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
                     placeholder="0.00"
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-sm text-amber-400 font-bold font-mono focus:border-amber-500"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-sm text-zinc-100 font-bold font-mono focus:border-amber-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-semibold text-emerald-400 uppercase mb-1">Sinal Pago (R$)</label>
+                  <label className="block text-[10px] font-semibold text-rose-400 uppercase mb-1">Desconto (R$)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    value={discount}
+                    onChange={(e) => setDiscount(e.target.value)}
+                    className="w-full bg-zinc-900 border border-rose-500/40 rounded-xl p-2 text-sm text-rose-400 font-bold font-mono focus:border-rose-400"
+                  />
+                </div>
+              </div>
+
+              {/* Total Líquido e Sinal */}
+              <div className="grid grid-cols-2 gap-2 bg-zinc-900/60 p-2.5 rounded-xl border border-zinc-800">
+                <div>
+                  <span className="text-[10px] text-zinc-400 uppercase block font-semibold">Total c/ Desconto:</span>
+                  <span className="text-sm font-bold font-mono text-emerald-400">
+                    R$ {Math.max(0, (parseFloat(value) || 0) - (parseFloat(discount) || 0)).toFixed(2)}
+                  </span>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-semibold text-amber-400 uppercase mb-0.5">Sinal Pago (R$)</label>
                   <input
                     type="number"
                     step="0.01"
                     placeholder="0.00"
                     value={deposit}
                     onChange={(e) => setDeposit(e.target.value)}
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-sm text-emerald-400 font-bold font-mono focus:border-amber-500"
+                    className="w-full bg-zinc-950 border border-zinc-700 rounded-lg px-2 py-1 text-xs text-amber-400 font-bold font-mono focus:border-amber-500"
                   />
                 </div>
               </div>
@@ -573,18 +617,40 @@ export const ServiceOrderModal: React.FC<ServiceOrderModalProps> = ({
                 </select>
               </div>
 
-              <div>
-                <label className="block text-[10px] font-semibold text-zinc-400 uppercase mb-1">Forma de Pagamento</label>
-                <select
-                  value={paymentMethod}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-xs text-white"
-                >
-                  <option value="Pix Tático">Pix Tático</option>
-                  <option value="Cartão de Crédito">Cartão de Crédito</option>
-                  <option value="Cartão de Débito">Cartão de Débito</option>
-                  <option value="Dinheiro Espécie">Dinheiro Espécie</option>
-                </select>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[10px] font-semibold text-zinc-400 uppercase mb-1">Forma de Pagamento</label>
+                  <select
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-xs text-white cursor-pointer"
+                  >
+                    <option value="Cartão">Cartão</option>
+                    <option value="Pix Tático">Pix Tático</option>
+                    <option value="Dinheiro Espécie">Dinheiro Espécie</option>
+                  </select>
+                </div>
+
+                {paymentMethod === 'Cartão' && (
+                  <div>
+                    <label className="block text-[10px] font-semibold text-sky-400 uppercase mb-1">Dividir no Cartão</label>
+                    <select
+                      value={installments}
+                      onChange={(e) => setInstallments(parseInt(e.target.value, 10))}
+                      className="w-full bg-zinc-900 border border-sky-500/40 rounded-xl p-2.5 text-xs text-sky-300 font-mono font-bold cursor-pointer"
+                    >
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((n) => {
+                        const totalCalculated = Math.max(0, (parseFloat(value) || 0) - (parseFloat(discount) || 0));
+                        const partVal = totalCalculated > 0 ? (totalCalculated / n).toFixed(2) : '0.00';
+                        return (
+                          <option key={n} value={n}>
+                            {n === 1 ? `1x à vista (R$ ${partVal})` : `${n}x de R$ ${partVal}`}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                )}
               </div>
             </div>
           </div>

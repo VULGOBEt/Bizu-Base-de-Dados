@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Search, MessageCircle, Eye, ShoppingBag, X, User, Printer, Shield, FileText } from 'lucide-react';
 import { Order } from '../types';
 import { formatBRL, formatDate } from '../utils/formatters';
-import { generateOrderWhatsAppText, openWhatsApp } from '../utils/whatsapp';
+import { openWhatsApp } from '../utils/whatsapp';
 
 interface SalesHistoryTabProps {
   sales: Order[];
@@ -12,7 +12,6 @@ interface SalesHistoryTabProps {
 export const SalesHistoryTab: React.FC<SalesHistoryTabProps> = ({ sales, onOpenReceipt }) => {
   const [search, setSearch] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [customPhone, setCustomPhone] = useState('');
 
   const filteredSales = sales.filter((s) => {
     const query = search.toLowerCase();
@@ -30,8 +29,7 @@ export const SalesHistoryTab: React.FC<SalesHistoryTabProps> = ({ sales, onOpenR
   });
 
   const handleQuickWhatsApp = (order: Order) => {
-    const text = generateOrderWhatsAppText(order);
-    openWhatsApp(order.phone || '', text);
+    openWhatsApp(order.phone || '');
   };
 
   return (
@@ -263,44 +261,28 @@ export const SalesHistoryTab: React.FC<SalesHistoryTabProps> = ({ sales, onOpenR
               </div>
             </div>
 
-            {/* Direct WhatsApp Box */}
-            <div className="bg-emerald-950/30 border border-emerald-500/30 p-3 rounded-xl space-y-2">
-              <span className="text-xs font-bold text-emerald-400 flex items-center space-x-1.5 uppercase">
-                <MessageCircle className="w-4 h-4 text-emerald-400" />
-                <span>Enviar Resumo por WhatsApp</span>
-              </span>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={customPhone}
-                  onChange={(e) => setCustomPhone(e.target.value)}
-                  placeholder="Número de WhatsApp (ex: 11999999999)"
-                  className="flex-1 bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-zinc-100 focus:outline-none focus:border-emerald-500 font-mono"
-                />
+            <div className="flex flex-col sm:flex-row justify-end gap-2 pt-2">
+              {selectedOrder.phone && (
                 <button
-                  onClick={() => {
-                    const text = generateOrderWhatsAppText(selectedOrder);
-                    openWhatsApp(customPhone, text);
-                  }}
-                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3 py-1.5 rounded-lg transition flex items-center space-x-1 cursor-pointer shrink-0"
+                  onClick={() => openWhatsApp(selectedOrder.phone || '')}
+                  className="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/40 text-xs px-4 py-2.5 rounded-xl transition font-bold flex items-center justify-center space-x-1.5 cursor-pointer"
+                  title="Abrir WhatsApp do Militar"
                 >
                   <MessageCircle className="w-3.5 h-3.5" />
-                  <span>Abrir WhatsApp</span>
+                  <span>WhatsApp ({selectedOrder.phone})</span>
                 </button>
-              </div>
-            </div>
+              )}
 
-            <div className="flex justify-end space-x-2 pt-2">
               <button
                 onClick={() => {
                   const ord = selectedOrder;
                   setSelectedOrder(null);
                   onOpenReceipt(ord);
                 }}
-                className="bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs px-4 py-2 rounded-xl transition cursor-pointer flex items-center space-x-1.5"
+                className="bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs px-4 py-2.5 rounded-xl transition cursor-pointer flex items-center justify-center space-x-1.5 shadow-lg shadow-amber-500/10"
               >
                 <Printer className="w-3.5 h-3.5" />
-                <span>Abrir Comprovante / Ficha Imprimível</span>
+                <span>Abrir Comprovante / Ficha</span>
               </button>
             </div>
           </div>

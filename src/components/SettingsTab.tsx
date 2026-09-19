@@ -446,16 +446,16 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               }}
               className={`p-4 rounded-xl border cursor-pointer transition space-y-2 ${
                 configForm.theme === 'tactical-light'
-                  ? 'bg-slate-200 border-amber-500 shadow-lg shadow-amber-500/20'
-                  : 'bg-slate-200/80 border-slate-300 hover:border-slate-400'
+                  ? 'bg-white border-amber-500 shadow-lg shadow-amber-500/20'
+                  : 'bg-white/90 border-slate-300 hover:border-slate-400'
               }`}
             >
-              <div className="h-10 rounded-lg bg-slate-100 border border-slate-300 flex items-center justify-between px-3">
-                <span className="w-3 h-3 rounded-full bg-slate-800"></span>
-                <span className="text-[10px] font-mono text-slate-800 font-bold">CINZA SUAVE</span>
+              <div className="h-10 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between px-3">
+                <span className="w-3 h-3 rounded-full bg-amber-500"></span>
+                <span className="text-[10px] font-mono text-slate-800 font-bold">BRANCO / CLARO</span>
               </div>
-              <h4 className="font-bold text-xs text-slate-900 uppercase">Tema Suave (Claro)</h4>
-              <p className="text-[11px] text-slate-600">Fundo cinza suave sem excesso de brilho, descansando a visão.</p>
+              <h4 className="font-bold text-xs text-slate-900 uppercase">Tema Branco Tático</h4>
+              <p className="text-[11px] text-slate-600">Interface limpa em fundo branco e cinza suave com alto contraste.</p>
             </div>
           </div>
         </div>

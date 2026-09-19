@@ -29,7 +29,7 @@
 
 /* Efeito Metálico & Texturas */
 .bg-tactical-card {
-  background: linear-gradient(135deg, rgba(24, 24, 27, 0.9) 0%, rgba(15, 15, 18, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(24, 24, 27, 0.92) 0%, rgba(15, 15, 18, 0.97) 100%);
 }
 
 .border-tactical {
@@ -86,6 +86,24 @@ html[data-theme="stealth-black"] .border-zinc-800\/60 {
   border-color: #18181b !important;
 }
 
+html[data-theme="stealth-black"] input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="stealth-black"] select,
+html[data-theme="stealth-black"] textarea {
+  background-color: #050507 !important;
+  border-color: #27272a !important;
+  color: #f4f4f5 !important;
+}
+
+html[data-theme="stealth-black"] aside {
+  background-color: #030304 !important;
+  border-right-color: #18181b !important;
+}
+
+html[data-theme="stealth-black"] header {
+  background-color: #050508 !important;
+  border-bottom-color: #18181b !important;
+}
+
 html[data-theme="stealth-black"] .tactical-crosshair-bg {
   background-image: radial-gradient(rgba(16, 185, 129, 0.12) 1px, transparent 1px) !important;
 }
@@ -94,127 +112,168 @@ html[data-theme="stealth-black"] .tactical-crosshair-bg {
    THEME 2: OLIVE MILITARIA (MILITAR VERDE OLIVA)
    ====================================================== */
 html[data-theme="olive-militaria"] {
-  background-color: #09120b;
+  background-color: #07120a;
   color: #f0fdf4;
 }
 
 html[data-theme="olive-militaria"] body,
 html[data-theme="olive-militaria"] main {
-  background-color: #09120b !important;
+  background-color: #07120a !important;
 }
 
 html[data-theme="olive-militaria"] .bg-zinc-950 {
-  background-color: #08100a !important;
+  background-color: #050d07 !important;
 }
 
 html[data-theme="olive-militaria"] .bg-zinc-900,
 html[data-theme="olive-militaria"] .bg-zinc-900\/80,
 html[data-theme="olive-militaria"] .bg-zinc-900\/90 {
-  background-color: #0f1f13 !important;
+  background-color: #0d1e11 !important;
 }
 
 html[data-theme="olive-militaria"] .bg-tactical-card {
-  background: linear-gradient(135deg, rgba(18, 36, 22, 0.95) 0%, rgba(12, 24, 15, 0.98) 100%) !important;
-  border-color: #233e28 !important;
+  background: linear-gradient(135deg, rgba(16, 36, 21, 0.95) 0%, rgba(10, 22, 13, 0.98) 100%) !important;
+  border-color: #224328 !important;
 }
 
 html[data-theme="olive-militaria"] .border-zinc-800,
 html[data-theme="olive-militaria"] .border-zinc-800\/80,
 html[data-theme="olive-militaria"] .border-zinc-800\/60 {
-  border-color: #1d3522 !important;
+  border-color: #1d3b23 !important;
+}
+
+html[data-theme="olive-militaria"] input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="olive-militaria"] select,
+html[data-theme="olive-militaria"] textarea {
+  background-color: #09170d !important;
+  border-color: #24462a !important;
+  color: #f0fdf4 !important;
+}
+
+html[data-theme="olive-militaria"] aside {
+  background-color: #09170e !important;
+  border-right-color: #1d3b23 !important;
+}
+
+html[data-theme="olive-militaria"] header {
+  background-color: #09170e !important;
+  border-bottom-color: #1d3b23 !important;
 }
 
 html[data-theme="olive-militaria"] .tactical-crosshair-bg {
-  background-image: radial-gradient(rgba(16, 185, 129, 0.12) 1px, transparent 1px) !important;
+  background-image: radial-gradient(rgba(34, 197, 94, 0.12) 1px, transparent 1px) !important;
 }
 
 /* ======================================================
-   THEME 3: CINZA TÁTICO SUAVE (TACTICAL LIGHT NEUTRAL)
+   THEME 3: AZUL OPERACIONAL TÁTICO (TACTICAL BLUE DARK)
+   ====================================================== */
+html[data-theme="tactical-blue"] {
+  background-color: #060b18;
+  color: #f1f5f9;
+}
+
+html[data-theme="tactical-blue"] body,
+html[data-theme="tactical-blue"] main {
+  background-color: #060b18 !important;
+  color: #f1f5f9 !important;
+}
+
+html[data-theme="tactical-blue"] .bg-zinc-950 {
+  background-color: #040711 !important;
+}
+
+html[data-theme="tactical-blue"] .bg-zinc-900,
+html[data-theme="tactical-blue"] .bg-zinc-900\/80,
+html[data-theme="tactical-blue"] .bg-zinc-900\/90 {
+  background-color: #0c152a !important;
+}
+
+html[data-theme="tactical-blue"] .bg-tactical-card {
+  background: linear-gradient(135deg, rgba(14, 25, 48, 0.95) 0%, rgba(9, 16, 32, 0.98) 100%) !important;
+  border-color: #1e3357 !important;
+}
+
+html[data-theme="tactical-blue"] .border-zinc-800,
+html[data-theme="tactical-blue"] .border-zinc-800\/80,
+html[data-theme="tactical-blue"] .border-zinc-800\/60 {
+  border-color: #1a2d4d !important;
+}
+
+html[data-theme="tactical-blue"] input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="tactical-blue"] select,
+html[data-theme="tactical-blue"] textarea {
+  background-color: #081021 !important;
+  border-color: #1e355c !important;
+  color: #f8fafc !important;
+}
+
+html[data-theme="tactical-blue"] aside {
+  background-color: #091224 !important;
+  border-right-color: #1a2d4d !important;
+}
+
+html[data-theme="tactical-blue"] header {
+  background-color: #091224 !important;
+  border-bottom-color: #1a2d4d !important;
+}
+
+html[data-theme="tactical-blue"] .tactical-crosshair-bg {
+  background-image: radial-gradient(rgba(56, 189, 248, 0.15) 1px, transparent 1px) !important;
+}
+
+/* ======================================================
+   THEME 4: TEMA BRANCO / CLARO TÁTICO (TACTICAL LIGHT)
    ====================================================== */
 html[data-theme="tactical-light"] {
-  background-color: #cbd5e1;
+  background-color: #f8fafc;
   color: #0f172a;
 }
 
 html[data-theme="tactical-light"] body,
 html[data-theme="tactical-light"] main {
-  background-color: #e2e8f0 !important;
+  background-color: #f8fafc !important;
   color: #0f172a !important;
 }
 
-html[data-theme="tactical-light"] .bg-zinc-950 {
-  background-color: #d1d5db !important;
+/* Sidebar in Light Mode - Clean White with Crisp Borders */
+html[data-theme="tactical-light"] aside {
+  background-color: #ffffff !important;
+  border-right-color: #e2e8f0 !important;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03) !important;
 }
 
-html[data-theme="tactical-light"] .bg-zinc-900,
-html[data-theme="tactical-light"] .bg-zinc-900\/80,
-html[data-theme="tactical-light"] .bg-zinc-900\/90 {
-  background-color: #f1f5f9 !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08) !important;
+html[data-theme="tactical-light"] aside .bg-zinc-900\/60,
+html[data-theme="tactical-light"] aside .bg-zinc-950,
+html[data-theme="tactical-light"] aside .bg-zinc-900 {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
 }
 
-html[data-theme="tactical-light"] .bg-tactical-card {
-  background: #f1f5f9 !important;
-  border-color: #cbd5e1 !important;
-  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.08) !important;
-}
-
-html[data-theme="tactical-light"] .border-zinc-800,
-html[data-theme="tactical-light"] .border-zinc-800\/80,
-html[data-theme="tactical-light"] .border-zinc-800\/60 {
-  border-color: #cbd5e1 !important;
-}
-
-/* Typography & Text overrides for light mode */
-html[data-theme="tactical-light"] main .text-white,
-html[data-theme="tactical-light"] main .text-zinc-100,
-html[data-theme="tactical-light"] main .text-zinc-200 {
+html[data-theme="tactical-light"] aside .text-white,
+html[data-theme="tactical-light"] aside .text-zinc-100,
+html[data-theme="tactical-light"] aside .text-zinc-200 {
   color: #0f172a !important;
 }
 
-html[data-theme="tactical-light"] main .text-zinc-300,
-html[data-theme="tactical-light"] main .text-zinc-400 {
-  color: #334155 !important;
-}
-
-html[data-theme="tactical-light"] main .text-zinc-500 {
+html[data-theme="tactical-light"] aside .text-zinc-300,
+html[data-theme="tactical-light"] aside .text-zinc-400 {
   color: #475569 !important;
 }
 
-/* Inputs & Form Elements in Light Mode */
-html[data-theme="tactical-light"] main input:not([type="checkbox"]):not([type="radio"]),
-html[data-theme="tactical-light"] main select,
-html[data-theme="tactical-light"] main textarea {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-  border-color: #94a3b8 !important;
+html[data-theme="tactical-light"] aside .border-zinc-800 {
+  border-color: #e2e8f0 !important;
 }
 
-html[data-theme="tactical-light"] main input::placeholder,
-html[data-theme="tactical-light"] main textarea::placeholder {
-  color: #64748b !important;
-}
-
-/* Sidebar in Light Mode - Slate Dark Contrast */
-html[data-theme="tactical-light"] aside {
-  background-color: #1e293b !important;
-  border-right-color: #334155 !important;
-}
-
-html[data-theme="tactical-light"] aside .text-zinc-200,
-html[data-theme="tactical-light"] aside .text-zinc-300,
-html[data-theme="tactical-light"] aside .text-white {
-  color: #f8fafc !important;
-}
-
-html[data-theme="tactical-light"] aside .text-zinc-400 {
-  color: #94a3b8 !important;
-}
-
-/* Header in Light Mode */
-html[data-theme="tactical-light"] header {
+html[data-theme="tactical-light"] aside button:not(.bg-amber-500):hover {
   background-color: #f1f5f9 !important;
-  border-bottom-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+/* Header in Light Mode - Sleek White Bar */
+html[data-theme="tactical-light"] header {
+  background-color: #ffffff !important;
+  border-bottom-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
 }
 
 html[data-theme="tactical-light"] header .text-white,
@@ -223,14 +282,92 @@ html[data-theme="tactical-light"] header .text-zinc-100 {
 }
 
 html[data-theme="tactical-light"] header .text-zinc-400 {
+  color: #64748b !important;
+}
+
+html[data-theme="tactical-light"] header .border-zinc-800 {
+  border-color: #e2e8f0 !important;
+}
+
+html[data-theme="tactical-light"] header .bg-zinc-950,
+html[data-theme="tactical-light"] header .bg-zinc-900 {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Cards & Surface Containers in Light Mode */
+html[data-theme="tactical-light"] .bg-tactical-card {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+html[data-theme="tactical-light"] .bg-zinc-950,
+html[data-theme="tactical-light"] .bg-zinc-950\/80,
+html[data-theme="tactical-light"] .bg-zinc-950\/60,
+html[data-theme="tactical-light"] .bg-zinc-950\/90 {
+  background-color: #f8fafc !important;
+}
+
+html[data-theme="tactical-light"] .bg-zinc-900,
+html[data-theme="tactical-light"] .bg-zinc-900\/80,
+html[data-theme="tactical-light"] .bg-zinc-900\/90,
+html[data-theme="tactical-light"] .bg-zinc-900\/50,
+html[data-theme="tactical-light"] .bg-zinc-900\/60 {
+  background-color: #ffffff !important;
+}
+
+html[data-theme="tactical-light"] .bg-zinc-800,
+html[data-theme="tactical-light"] .bg-zinc-800\/80,
+html[data-theme="tactical-light"] .bg-zinc-800\/60,
+html[data-theme="tactical-light"] .bg-zinc-800\/50,
+html[data-theme="tactical-light"] .bg-zinc-800\/40 {
+  background-color: #f1f5f9 !important;
+}
+
+html[data-theme="tactical-light"] .border-zinc-800,
+html[data-theme="tactical-light"] .border-zinc-800\/80,
+html[data-theme="tactical-light"] .border-zinc-800\/60,
+html[data-theme="tactical-light"] .border-zinc-800\/40,
+html[data-theme="tactical-light"] .border-zinc-700,
+html[data-theme="tactical-light"] .divide-zinc-800 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Typography Overrides for High Contrast Legibility */
+html[data-theme="tactical-light"] .text-white,
+html[data-theme="tactical-light"] .text-zinc-100,
+html[data-theme="tactical-light"] .text-zinc-200 {
+  color: #0f172a !important;
+}
+
+html[data-theme="tactical-light"] .text-zinc-300,
+html[data-theme="tactical-light"] .text-zinc-400 {
   color: #334155 !important;
 }
 
-/* Modals & Receipts in Light Mode */
-html[data-theme="tactical-light"] .bg-zinc-950\/80,
-html[data-theme="tactical-light"] .bg-zinc-900\/90 {
-  background-color: #f1f5f9 !important;
-  color: #0f172a !important;
+html[data-theme="tactical-light"] .text-zinc-500 {
+  color: #64748b !important;
+}
+
+html[data-theme="tactical-light"] .text-amber-400,
+html[data-theme="tactical-light"] .text-amber-300,
+html[data-theme="tactical-light"] .text-amber-200 {
+  color: #b45309 !important;
+}
+
+html[data-theme="tactical-light"] .text-emerald-400,
+html[data-theme="tactical-light"] .text-emerald-300 {
+  color: #047857 !important;
+}
+
+html[data-theme="tactical-light"] .text-rose-400 {
+  color: #be123c !important;
+}
+
+html[data-theme="tactical-light"] .text-sky-400,
+html[data-theme="tactical-light"] .text-blue-400 {
+  color: #1d4ed8 !important;
 }
 
 html[data-theme="tactical-light"] .text-metallic {
@@ -240,64 +377,187 @@ html[data-theme="tactical-light"] .text-metallic {
 }
 
 html[data-theme="tactical-light"] .tactical-crosshair-bg {
-  background-image: radial-gradient(rgba(15, 23, 42, 0.1) 1px, transparent 1px) !important;
+  background-image: radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px) !important;
+}
+
+/* Modals & Dialogs in Light Mode */
+html[data-theme="tactical-light"] .fixed.inset-0 > div,
+html[data-theme="tactical-light"] .fixed.inset-0 .bg-zinc-900,
+html[data-theme="tactical-light"] .fixed.inset-0 .bg-zinc-950 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Inputs & Form Elements in Light Mode */
+html[data-theme="tactical-light"] input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="tactical-light"] select,
+html[data-theme="tactical-light"] textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+
+html[data-theme="tactical-light"] input:not([type="checkbox"]):not([type="radio"]):focus,
+html[data-theme="tactical-light"] select:focus,
+html[data-theme="tactical-light"] textarea:focus {
+  border-color: #d97706 !important;
+  outline: none !important;
+}
+
+html[data-theme="tactical-light"] input::placeholder,
+html[data-theme="tactical-light"] textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Light Mode Scrollbars */
+html[data-theme="tactical-light"] ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+html[data-theme="tactical-light"] ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+html[data-theme="tactical-light"] ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 /* ======================================================
-   THEME 4: AZUL OPERACIONAL TÁTICO (TACTICAL BLUE DARK)
+   BADGES DE STATUS COLORIDOS PARA ORDENS DE SERVIÇO
    ====================================================== */
-html[data-theme="tactical-blue"] {
-  background-color: #080d1a;
-  color: #f1f5f9;
+.status-badge-pendente {
+  background-color: rgba(234, 179, 8, 0.16) !important;
+  color: #facc15 !important;
+  border: 1px solid rgba(234, 179, 8, 0.38) !important;
 }
 
-html[data-theme="tactical-blue"] body,
-html[data-theme="tactical-blue"] main {
-  background-color: #080d1a !important;
-  color: #f1f5f9 !important;
+.status-badge-producao {
+  background-color: rgba(59, 130, 246, 0.16) !important;
+  color: #60a5fa !important;
+  border: 1px solid rgba(59, 130, 246, 0.38) !important;
 }
 
-html[data-theme="tactical-blue"] .bg-zinc-950 {
-  background-color: #050814 !important;
+.status-badge-pronto {
+  background-color: rgba(16, 185, 129, 0.16) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.38) !important;
 }
 
-html[data-theme="tactical-blue"] .bg-zinc-900,
-html[data-theme="tactical-blue"] .bg-zinc-900\/80,
-html[data-theme="tactical-blue"] .bg-zinc-900\/90 {
-  background-color: #0f172a !important;
+.status-badge-entregue {
+  background-color: rgba(113, 113, 122, 0.22) !important;
+  color: #d4d4d8 !important;
+  border: 1px solid rgba(113, 113, 122, 0.38) !important;
 }
 
-html[data-theme="tactical-blue"] .bg-tactical-card {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 16, 31, 0.98) 100%) !important;
-  border-color: #1e293b !important;
+.status-badge-cancelado {
+  background-color: rgba(244, 63, 94, 0.16) !important;
+  color: #fb7185 !important;
+  border: 1px solid rgba(244, 63, 94, 0.38) !important;
 }
 
-html[data-theme="tactical-blue"] .border-zinc-800,
-html[data-theme="tactical-blue"] .border-zinc-800\/80,
-html[data-theme="tactical-blue"] .border-zinc-800\/60 {
-  border-color: #1e293b !important;
+/* Light Theme Overrides for Status Badges */
+html[data-theme="tactical-light"] .status-badge-pendente {
+  background-color: #fef9c3 !important;
+  color: #854d0e !important;
+  border-color: #fde047 !important;
 }
 
-html[data-theme="tactical-blue"] .tactical-crosshair-bg {
-  background-image: radial-gradient(rgba(56, 189, 248, 0.15) 1px, transparent 1px) !important;
+html[data-theme="tactical-light"] .status-badge-producao {
+  background-color: #dbeafe !important;
+  color: #1e40af !important;
+  border-color: #93c5fd !important;
 }
 
-html[data-theme="tactical-blue"] input:not([type="checkbox"]):not([type="radio"]),
-html[data-theme="tactical-blue"] select,
-html[data-theme="tactical-blue"] textarea {
-  background-color: #090e1d !important;
-  border-color: #1e293b !important;
-  color: #f8fafc !important;
+html[data-theme="tactical-light"] .status-badge-pronto {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+  border-color: #6ee7b7 !important;
 }
 
-html[data-theme="tactical-blue"] aside {
-  background-color: #0b1329 !important;
-  border-right-color: #1e293b !important;
+html[data-theme="tactical-light"] .status-badge-entregue {
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
 }
 
-html[data-theme="tactical-blue"] header {
-  background-color: #0b1329 !important;
-  border-bottom-color: #1e293b !important;
+html[data-theme="tactical-light"] .status-badge-cancelado {
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
+  border-color: #fca5a5 !important;
 }
 
+/* ======================================================
+   PRINT STYLES FOR OFFICIAL TACTICAL RECEIPTS / COMPROVANTES
+   ====================================================== */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  #printable-os-card,
+  #printable-os-card *,
+  #printable-order,
+  #printable-order * {
+    visibility: visible;
+  }
+  #printable-os-card,
+  #printable-order {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 20px !important;
+  }
+  #printable-os-card .bg-zinc-950,
+  #printable-os-card .bg-zinc-900,
+  #printable-os-card .bg-zinc-900\/90,
+  #printable-os-card .bg-zinc-900\/50,
+  #printable-os-card .bg-zinc-900\/80,
+  #printable-order .bg-zinc-950,
+  #printable-order .bg-zinc-900,
+  #printable-order .bg-zinc-900\/60,
+  #printable-order .bg-zinc-950\/60,
+  #printable-order .bg-zinc-950\/80 {
+    background-color: #ffffff !important;
+    border-color: #666666 !important;
+    color: #000000 !important;
+  }
+  #printable-os-card .text-white,
+  #printable-os-card .text-zinc-100,
+  #printable-os-card .text-zinc-200,
+  #printable-os-card .text-zinc-300,
+  #printable-order .text-white,
+  #printable-order .text-zinc-100,
+  #printable-order .text-zinc-200,
+  #printable-order .text-zinc-300 {
+    color: #000000 !important;
+  }
+  #printable-os-card .text-zinc-400,
+  #printable-os-card .text-zinc-500,
+  #printable-order .text-zinc-400,
+  #printable-order .text-zinc-500 {
+    color: #333333 !important;
+  }
+  #printable-os-card .text-amber-400,
+  #printable-os-card .text-amber-100,
+  #printable-os-card .text-emerald-400,
+  #printable-order .text-amber-400,
+  #printable-order .text-emerald-400 {
+    color: #000000 !important;
+    font-weight: 700 !important;
+  }
+}
 

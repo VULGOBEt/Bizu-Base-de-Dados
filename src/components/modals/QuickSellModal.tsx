@@ -18,7 +18,8 @@ export const QuickSellModal: React.FC<QuickSellModalProps> = ({
 }) => {
   const [selectedProdId, setSelectedProdId] = useState('');
   const [qty, setQty] = useState('1');
-  const [payment, setPayment] = useState('Pix Tático');
+  const [payment, setPayment] = useState('Cartão');
+  const [installments, setInstallments] = useState(1);
   const [reason, setReason] = useState('');
 
   const availableProducts = (products || []).filter((p) => p.stock > 0);
@@ -37,9 +38,11 @@ export const QuickSellModal: React.FC<QuickSellModalProps> = ({
     e.preventDefault();
     if (!selectedProdId) return;
 
-    onExecute(selectedProdId, parseInt(qty, 10) || 1, payment, reason.trim());
+    const finalPay = payment === 'Cartão' && installments > 1 ? `Cartão (${installments}x)` : payment;
+    onExecute(selectedProdId, parseInt(qty, 10) || 1, finalPay, reason.trim());
     setReason('');
     setQty('1');
+    setInstallments(1);
   };
 
   return (
@@ -103,13 +106,36 @@ export const QuickSellModal: React.FC<QuickSellModalProps> = ({
                 onChange={(e) => setPayment(e.target.value)}
                 className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-emerald-500 cursor-pointer"
               >
+                <option value="Cartão">Cartão</option>
                 <option value="Pix Tático">Pix Tático</option>
-                <option value="Cartão de Crédito">Cartão de Crédito</option>
-                <option value="Cartão de Débito">Cartão de Débito</option>
                 <option value="Dinheiro Espécie">Dinheiro Espécie</option>
               </select>
             </div>
           </div>
+
+          {payment === 'Cartão' && (
+            <div className="bg-sky-950/30 border border-sky-500/30 p-2.5 rounded-xl">
+              <label className="block text-[10px] font-semibold text-sky-400 uppercase mb-1">
+                Dividir no Cartão
+              </label>
+              <select
+                value={installments}
+                onChange={(e) => setInstallments(parseInt(e.target.value, 10))}
+                className="w-full bg-zinc-950 border border-sky-500/50 rounded-lg px-2.5 py-1.5 text-xs text-sky-300 font-mono font-bold cursor-pointer focus:outline-none"
+              >
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((n) => {
+                  const unitPrice = currentProd?.salePrice || 0;
+                  const total = unitPrice * (parseInt(qty, 10) || 1);
+                  const installmentVal = total > 0 ? (total / n).toFixed(2) : '0.00';
+                  return (
+                    <option key={n} value={n}>
+                      {n === 1 ? `1x à vista (R$ ${installmentVal})` : `${n}x de R$ ${installmentVal}`}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          )}
 
           <div>
             <label className="block text-[11px] font-semibold text-zinc-300 uppercase mb-1">

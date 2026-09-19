@@ -34,7 +34,8 @@ export const PosTab: React.FC<PosTabProps> = ({
   const [force, setForce] = useState('Polícia Militar');
   const [battalion, setBattalion] = useState('');
   const [embroideryDetails, setEmbroideryDetails] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('Pix Tático');
+  const [paymentMethod, setPaymentMethod] = useState('Cartão');
+  const [installments, setInstallments] = useState<number>(1);
   const [orderType, setOrderType] = useState('Venda Direta');
 
   // Discount state
@@ -79,6 +80,10 @@ export const PosTab: React.FC<PosTabProps> = ({
       return;
     }
 
+    const formattedPayment = paymentMethod === 'Cartão' && installments > 1
+      ? `Cartão (${installments}x de R$ ${(finalTotal / installments).toFixed(2)})`
+      : paymentMethod;
+
     onConfirmOrder({
       soldado: soldado.trim(),
       re: '',
@@ -87,10 +92,11 @@ export const PosTab: React.FC<PosTabProps> = ({
       bloodType: bloodType.trim(),
       force,
       battalion: battalion.trim() || 'Não Informado',
-      paymentMethod,
+      paymentMethod: formattedPayment,
       orderType,
       subtotal,
       discount: totalDiscount,
+      installments: paymentMethod === 'Cartão' ? installments : 1,
       total: finalTotal,
       specifications: embroideryDetails.trim(),
     });
@@ -408,39 +414,62 @@ export const PosTab: React.FC<PosTabProps> = ({
           </div>
 
           {/* Payment & Type */}
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="block text-[10px] font-semibold text-zinc-400 uppercase mb-1">
-                Forma de Pagamento
-              </label>
-              <select
-                value={paymentMethod}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-zinc-100 focus:outline-none focus:border-emerald-500 cursor-pointer"
-              >
-                <option value="Pix Tático">Pix Tático</option>
-                <option value="Cartão de Crédito">Cartão de Crédito</option>
-                <option value="Cartão de Débito">Cartão de Débito</option>
-                <option value="Dinheiro">Dinheiro Espécie</option>
-                <option value="Cautela / Faturado">Cautela Operacional</option>
-              </select>
+          <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-[10px] font-semibold text-zinc-400 uppercase mb-1">
+                  Forma de Pagamento
+                </label>
+                <select
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-zinc-100 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                >
+                  <option value="Cartão">Cartão</option>
+                  <option value="Pix Tático">Pix Tático</option>
+                  <option value="Dinheiro">Dinheiro Espécie</option>
+                  <option value="Cautela / Faturado">Cautela Operacional</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-semibold text-zinc-400 uppercase mb-1">
+                  Tipo de Pedido
+                </label>
+                <select
+                  value={orderType}
+                  onChange={(e) => setOrderType(e.target.value)}
+                  className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-zinc-100 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                >
+                  <option value="Venda Direta">Venda Direta</option>
+                  <option value="Equipamento de Cautela">Cautela de Equipamento</option>
+                  <option value="Encomenda Especial">Encomenda Especial</option>
+                  <option value="Reserva Tática">Reserva Tática</option>
+                </select>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-[10px] font-semibold text-zinc-400 uppercase mb-1">
-                Tipo de Pedido
-              </label>
-              <select
-                value={orderType}
-                onChange={(e) => setOrderType(e.target.value)}
-                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-zinc-100 focus:outline-none focus:border-emerald-500 cursor-pointer"
-              >
-                <option value="Venda Direta">Venda Direta</option>
-                <option value="Equipamento de Cautela">Cautela de Equipamento</option>
-                <option value="Encomenda Especial">Encomenda Especial</option>
-                <option value="Reserva Tática">Reserva Tática</option>
-              </select>
-            </div>
+            {paymentMethod === 'Cartão' && (
+              <div className="bg-sky-950/30 border border-sky-500/30 p-2 rounded-xl">
+                <label className="block text-[10px] font-semibold text-sky-400 uppercase mb-1">
+                  Dividir no Cartão
+                </label>
+                <select
+                  value={installments}
+                  onChange={(e) => setInstallments(parseInt(e.target.value, 10))}
+                  className="w-full bg-zinc-950 border border-sky-500/50 rounded-lg px-2.5 py-1.5 text-xs text-sky-300 font-mono font-bold cursor-pointer focus:outline-none"
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((n) => {
+                    const installmentVal = finalTotal > 0 ? (finalTotal / n).toFixed(2) : '0.00';
+                    return (
+                      <option key={n} value={n}>
+                        {n === 1 ? `1x à vista (R$ ${installmentVal})` : `${n}x de R$ ${installmentVal}`}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            )}
           </div>
         </div>
 

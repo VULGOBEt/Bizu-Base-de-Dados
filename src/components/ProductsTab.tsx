@@ -96,7 +96,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({
               <span>Arsenal e Estoque de Equipamentos</span>
             </h2>
             <p className="text-xs text-zinc-400">
-              {products.length} SKUs cadastrados • Total de {totalStockCount} unidades em estoque
+              {products.length} itens cadastrados • Total de {totalStockCount} unidades em estoque
             </p>
           </div>
         </div>
@@ -119,7 +119,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar equipamento, SKU, farda, coturno, tático..."
+            placeholder="Buscar equipamento, farda, coturno, tático..."
             className="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-4 py-2 text-xs text-zinc-200 focus:outline-none focus:border-amber-500 placeholder-zinc-500 font-mono"
           />
         </div>
@@ -219,11 +219,8 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({
                   } p-4 rounded-2xl transition flex flex-col justify-between space-y-3 group shadow-lg`}
                 >
                   <div className="space-y-2.5">
-                    {/* SKU & Stock Badges */}
-                    <div className="flex justify-between items-center gap-1">
-                      <span className="text-[10px] font-mono text-zinc-400 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800">
-                        {p.sku}
-                      </span>
+                    {/* Stock Badges */}
+                    <div className="flex justify-end items-center gap-1">
                       <span
                         className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded-full flex items-center space-x-1 ${
                           isOutOfStock
@@ -259,14 +256,10 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({
                       )}
                     </div>
 
-                    {/* Category & Location Badges */}
+                    {/* Category Badge */}
                     <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
-                      <span className="bg-zinc-950 text-zinc-300 px-2 py-0.5 rounded border border-zinc-800">
+                      <span className="bg-zinc-950 text-zinc-300 px-2 py-0.5 rounded border border-zinc-800 font-medium">
                         {p.category}
-                      </span>
-                      <span className="inline-flex items-center space-x-1 text-zinc-400 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800">
-                        <MapPin className="w-3 h-3 text-amber-500" />
-                        <span>{p.location || 'Arsenal General'}</span>
                       </span>
                     </div>
                   </div>
@@ -324,7 +317,6 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({
               <thead className="bg-zinc-950 text-zinc-400 border-b border-zinc-800 uppercase text-[10px] tracking-wider font-tactical">
                 <tr>
                   <th className="p-4 font-semibold">Equipamento Tático</th>
-                  <th className="p-4 font-semibold">Localização</th>
                   <th className="p-4 font-semibold">Categoria</th>
                   <th className="p-4 font-semibold text-right">Custo (R$)</th>
                   <th className="p-4 font-semibold text-right">Venda (R$)</th>
@@ -336,7 +328,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({
               <tbody className="divide-y divide-zinc-800/60 text-zinc-300">
                 {filteredProducts.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="p-8 text-center text-zinc-500 font-mono">
+                    <td colSpan={7} className="p-8 text-center text-zinc-500 font-mono">
                       Nenhum equipamento encontrado no arsenal.
                     </td>
                   </tr>
@@ -373,15 +365,11 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({
                               </span>
                             )}
                           </div>
-                          <div className="text-[11px] text-zinc-500 font-mono">
-                            SKU: {p.sku} {p.code ? `• Cód: ${p.code}` : ''} {p.supplier ? '• ' + p.supplier : ''}
-                          </div>
-                        </td>
-                        <td className="p-4 text-zinc-400 font-mono text-[11px]">
-                          <span className="inline-flex items-center space-x-1 text-zinc-400 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800">
-                            <MapPin className="w-3 h-3 text-amber-500" />
-                            <span>{p.location || 'Arsenal General'}</span>
-                          </span>
+                          {(p.code || p.supplier) && (
+                            <div className="text-[11px] text-zinc-500 font-mono">
+                              {p.code ? `Cód: ${p.code}` : ''} {p.supplier ? '• ' + p.supplier : ''}
+                            </div>
+                          )}
                         </td>
                         <td className="p-4 text-zinc-400">
                           <span className="bg-zinc-900 px-2.5 py-1 rounded-lg text-xs font-medium border border-zinc-800">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldAlert, Zap, Clock, PlusCircle, UserCheck, ChevronDown, Check, Shield, User, LogOut } from 'lucide-react';
+import { ShieldAlert, Zap, Clock, Palette, LogOut } from 'lucide-react';
 import { TabType, UserPermission } from '../types';
 
 interface HeaderProps {
@@ -10,16 +10,19 @@ interface HeaderProps {
   activeUser?: UserPermission;
   onSelectUser?: (user: UserPermission) => void;
   onLogout?: () => void;
+  currentTheme?: string;
+  onSelectTheme?: (theme: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   currentTab,
   onOpenQuickSell,
-  onOpenNewOrder,
   users = [],
   activeUser,
   onSelectUser,
   onLogout,
+  currentTheme = 'tactical-dark',
+  onSelectTheme,
 }) => {
   const [timeStr, setTimeStr] = useState<string>('--:--:--');
   const [dateStr, setDateStr] = useState<string>('');
@@ -35,43 +38,57 @@ export const Header: React.FC<HeaderProps> = ({
     return () => clearInterval(timer);
   }, []);
 
-  const tabTitles: Record<TabType, [string, string]> = {
-    dashboard: ['Painel Tático Geral', 'Controle de inventário de equipamentos táticos e baixas militares'],
-    products: ['Arsenal & Estoque', 'Gerencie todos os itens do arsenal com alertas de reposição'],
-    movements: ['Movimentações de Estoque', 'Histórico auditável de entradas, saídas e ajustes do arsenal'],
-    pos: ['Pedido Militar (POS)', 'Selecione equipamentos, aplique descontos e configure os dados do militar'],
-    'service-orders': ['Pedidos', 'Gestão unificada de pedidos do arsenal e ordens de serviço'],
-    sales: ['Histórico de Pedidos & Cautelas', 'Consulte todas as baixas registradas com dados do militar'],
-    reports: ['Relatórios & Estatísticas Táticas', 'Análise gráfica do arsenal e demandas mais baixadas'],
-    settings: ['Configurações do Sistema', 'Dados da loja BIZÚ, gestão de operadores, backup e parâmetros'],
+  const tabTitles: Record<TabType, string> = {
+    dashboard: 'Painel Tático Geral',
+    products: 'Arsenal & Estoque',
+    movements: 'Movimentações de Estoque',
+    pos: 'Pedido Militar (POS)',
+    'service-orders': 'Ordens de Serviço',
+    sales: 'Histórico de Pedidos & Cautelas',
+    settings: 'Configurações do Sistema',
   };
 
-  const [title, subtitle] = tabTitles[currentTab] || ['Painel Tático', ''];
+  const title = tabTitles[currentTab] || 'Painel Tático';
 
-  const getRoleBadgeStyle = (role: string) => {
-    switch (role) {
-      case 'ADMINISTRADOR':
-        return 'bg-amber-500/20 text-amber-400 border-amber-500/40';
-      case 'GERENTE':
-        return 'bg-blue-500/20 text-blue-400 border-blue-500/40';
-      default:
-        return 'bg-zinc-800 text-zinc-300 border-zinc-700';
-    }
-  };
+  const themes = [
+    { id: 'tactical-dark', label: '🌙 Tático Escuro' },
+    { id: 'stealth-black', label: '🖤 Stealth Black' },
+    { id: 'olive-militaria', label: '🪖 Verde Oliva' },
+    { id: 'tactical-blue', label: '🔵 Azul Tático' },
+    { id: 'tactical-light', label: '☀️ Tema Claro' },
+  ];
 
   return (
-    <header className="bg-zinc-900/90 backdrop-blur-md border-b border-zinc-800 px-4 sm:px-6 py-3.5 flex items-center justify-between sticky top-0 z-10 gap-2">
+    <header className="bg-zinc-900/90 backdrop-blur-md border-b border-zinc-800 px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-10 gap-2">
       <div className="flex items-center space-x-3">
         <div className="p-2 bg-amber-500/10 border border-amber-500/30 rounded-lg text-amber-400 hidden sm:block">
           <ShieldAlert className="w-5 h-5" />
         </div>
         <div>
           <h2 className="text-base sm:text-lg font-bold text-white uppercase tracking-wider font-tactical">{title}</h2>
-          <p className="text-xs text-zinc-400 hidden md:block">{subtitle}</p>
         </div>
       </div>
 
       <div className="flex items-center space-x-2 sm:space-x-3">
+        {/* Quick Theme Switcher */}
+        {onSelectTheme && (
+          <div className="flex items-center space-x-1.5 bg-zinc-950 border border-zinc-800 px-2.5 py-1.5 rounded-xl">
+            <Palette className="w-3.5 h-3.5 text-amber-400" />
+            <select
+              value={currentTheme}
+              onChange={(e) => onSelectTheme(e.target.value)}
+              className="bg-transparent text-xs text-zinc-200 focus:outline-none cursor-pointer font-medium"
+              title="Alternar Tema Visual"
+            >
+              {themes.map((t) => (
+                <option key={t.id} value={t.id} className="bg-zinc-900 text-zinc-100">
+                  {t.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         <button
           onClick={onOpenQuickSell}
           className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider px-3 py-2 rounded-lg flex items-center space-x-1.5 transition shadow-md shadow-emerald-600/20 border border-emerald-400/30 cursor-pointer"
@@ -79,6 +96,7 @@ export const Header: React.FC<HeaderProps> = ({
           <Zap className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Baixa Rápida</span>
         </button>
+
         <div className="hidden sm:flex items-center space-x-3 bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 border border-amber-500/40 px-4 py-2 rounded-xl shadow-lg shadow-amber-500/10 group hover:border-amber-500/80 transition">
           <div className="relative flex items-center justify-center">
             <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400 opacity-75"></span>
